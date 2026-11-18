@@ -18,6 +18,7 @@ Proyecto desarrollado en el marco de la competencia (estilo hackathon) organizad
 
 - [Requerimientos conocidos](docs/requerimientos.md): lo que sabemos hasta ahora, preguntas abiertas y supuestos.
 - [Plan de acción](docs/plan-de-accion.md): cronograma, roles, entregables y estrategia para la competencia.
+- [Perfil de la Fundación](docs/perfil-fundacion.md): misión, valores, marca, voz y lineamientos de interfaz.
 
 ## Fechas clave (tentativas)
 
