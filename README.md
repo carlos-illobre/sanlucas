@@ -1,0 +1,31 @@
+# Sistema de Gestión de Becas – Fundación Pastoral Universitaria San Lucas
+
+Solución para gestionar el ciclo completo de becas universitarias de la Fundación Pastoral Universitaria San Lucas: desde la apertura de una convocatoria hasta el dictamen final, para todas las universidades con las que trabaja la Fundación.
+
+Proyecto desarrollado en el marco de la competencia (estilo hackathon) organizada por la Facultad de Ingeniería de UADE junto con la Fundación.
+
+## Componentes
+
+| Componente | Carpeta | Descripción |
+|---|---|---|
+| App del postulante | `apps/mobile` | Aplicación móvil para postularse, cargar documentación y seguir el estado de la beca |
+| Panel de administración | `apps/admin` | Aplicación web para la Fundación: convocatorias, revisión, socioambiental, informes y dictámenes |
+| Backend | `backend` | API, base de datos, autenticación y almacenamiento de documentos |
+
+> El stack tecnológico todavía no está definido. Ver la propuesta en [docs/plan-de-accion.md](docs/plan-de-accion.md#stack-recomendado).
+
+## Documentación
+
+- [Requerimientos conocidos](docs/requerimientos.md): lo que sabemos hasta ahora, preguntas abiertas y supuestos.
+- [Plan de acción](docs/plan-de-accion.md): cronograma, roles, entregables y estrategia para la competencia.
+
+## Fechas clave (tentativas)
+
+| Fecha | Hito |
+|---|---|
+| Mar 24/11/2026 | Confirmación de equipos |
+| Hasta 8–10/12/2026 | Relevamiento de requerimientos con el referente de la Fundación |
+| Dic 2026 – Ene 2027 | Desarrollo y pruebas |
+| 18/01/2027 | Retoma de la universidad – checkpoint de avance |
+| 1ª semana de feb 2027 | Presentación del producto ante el jurado (asistencia obligatoria de todo el equipo) |
+| Feb 2027 | Evaluación por la Fundación (producto hosteado) y premiación |
