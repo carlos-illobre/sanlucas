@@ -1,0 +1,178 @@
+/* Fundación San Lucas — lenguaje visual común de las maquetas.
+   Fuente de verdad: docs/design/visual-language.md (tokens tomados de docs/perfil-fundacion.md). */
+
+@font-face {
+  font-family: "Montserrat";
+  src: url("fonts/montserrat-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Inter";
+  src: url("fonts/inter-variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  /* Marca */
+  --sl-azul-noche: #203758;
+  --sl-verde: #207766;          /* primario: acciones */
+  --sl-verde-oscuro: #185C4F;   /* hover / presionado */
+  --sl-azul: #3869A1;           /* secundario: información */
+  --sl-verde-agua: #3E9080;     /* acentos, foco (no para texto chico) */
+  --sl-celeste: #91BEC6;        /* decorativo */
+  --sl-bruma: #EEF5F4;          /* fondos suaves */
+  --sl-cielo: #EDF2F9;          /* fondo suave azul */
+
+  /* Neutros */
+  --sl-fondo: #F7F7F7;
+  --sl-superficie: #FFFFFF;
+  --sl-borde: #E3E7EA;
+  --sl-texto: #1C1C1C;
+  --sl-gris: #5F6B73;
+
+  /* Estados (texto con contraste AA sobre blanco) */
+  --sl-exito: #1E7B4F;   --sl-exito-fondo: #E6F4EC;
+  --sl-alerta: #9A6400;  --sl-alerta-fondo: #FDF3E1;
+  --sl-error: #B3261E;   --sl-error-fondo: #FBEAE8;
+  --sl-info: #3869A1;    --sl-info-fondo: #EDF2F9;
+
+  /* Tipografía */
+  --sl-font-titulos: "Montserrat", system-ui, sans-serif;
+  --sl-font-texto: "Inter", system-ui, sans-serif;
+  --sl-t-display: 32px;
+  --sl-t-h1: 24px;
+  --sl-t-h2: 20px;
+  --sl-t-h3: 17px;
+  --sl-t-cuerpo: 16px;
+  --sl-t-chico: 14px;   /* mínimo absoluto */
+
+  /* Espacio (múltiplos de 4) */
+  --sl-e1: 4px; --sl-e2: 8px; --sl-e3: 12px; --sl-e4: 16px;
+  --sl-e5: 20px; --sl-e6: 24px; --sl-e8: 32px; --sl-e10: 40px; --sl-e12: 48px;
+
+  /* Forma y relieve */
+  --sl-radio-chico: 8px;
+  --sl-radio: 12px;
+  --sl-radio-grande: 20px;
+  --sl-radio-pastilla: 999px;
+  --sl-sombra-1: 0 1px 2px rgba(32, 55, 88, .06), 0 1px 3px rgba(32, 55, 88, .08);
+  --sl-sombra-2: 0 4px 12px rgba(32, 55, 88, .08), 0 2px 4px rgba(32, 55, 88, .06);
+  --sl-sombra-3: 0 16px 40px rgba(32, 55, 88, .16);
+
+  /* Movimiento */
+  --sl-dur-rapida: 120ms;
+  --sl-dur: 220ms;
+  --sl-dur-lenta: 420ms;
+  --sl-curva: cubic-bezier(.2, .8, .2, 1);
+  --sl-curva-salida: cubic-bezier(.4, 0, 1, 1);
+
+  /* Tamaños táctiles */
+  --sl-toque: 48px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--sl-fondo);
+  color: var(--sl-texto);
+  font-family: var(--sl-font-texto);
+  font-size: var(--sl-t-cuerpo);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+h1, h2, h3, .sl-titulo { font-family: var(--sl-font-titulos); line-height: 1.2; margin: 0; color: var(--sl-azul-noche); }
+h1 { font-size: var(--sl-t-h1); font-weight: 700; }
+h2 { font-size: var(--sl-t-h2); font-weight: 700; }
+h3 { font-size: var(--sl-t-h3); font-weight: 600; }
+p { margin: 0; }
+.sl-chico { font-size: var(--sl-t-chico); color: var(--sl-gris); }
+.sl-placa {            /* placa de color con texto en mayúsculas, como sus piezas de Instagram */
+  display: inline-block; font-family: var(--sl-font-titulos); font-weight: 700;
+  text-transform: uppercase; letter-spacing: .02em; color: #fff;
+  background: var(--sl-verde); padding: var(--sl-e2) var(--sl-e4); border-radius: 2px;
+}
+.sl-placa.azul { background: var(--sl-azul); }
+
+.sl-icon { display: block; flex: none; }
+i[data-icon] { display: inline-flex; font-style: normal; }
+
+/* Botones */
+.sl-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sl-e2);
+  min-height: var(--sl-toque); padding: 0 var(--sl-e6);
+  border: 0; border-radius: var(--sl-radio); cursor: pointer;
+  font: 600 var(--sl-t-cuerpo)/1 var(--sl-font-texto);
+  transition: transform var(--sl-dur-rapida) var(--sl-curva), opacity var(--sl-dur-rapida);
+}
+.sl-btn:active { transform: scale(.97); }
+.sl-btn:focus-visible, .sl-foco:focus-visible { outline: 3px solid var(--sl-verde-agua); outline-offset: 2px; }
+.sl-btn-primario { background: var(--sl-verde); color: #fff; }
+.sl-btn-primario:hover { background: var(--sl-verde-oscuro); }
+.sl-btn-secundario { background: var(--sl-superficie); color: var(--sl-verde); box-shadow: inset 0 0 0 1.5px var(--sl-verde); }
+.sl-btn-texto { background: transparent; color: var(--sl-verde); padding: 0 var(--sl-e3); }
+.sl-btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+/* Tarjetas */
+.sl-card { background: var(--sl-superficie); border-radius: var(--sl-radio); box-shadow: var(--sl-sombra-1); padding: var(--sl-e4); }
+
+/* Pastillas de estado (siempre con texto, nunca solo color) */
+.sl-chip {
+  display: inline-flex; align-items: center; gap: var(--sl-e1);
+  height: 28px; padding: 0 var(--sl-e3); border-radius: var(--sl-radio-pastilla);
+  font: 600 var(--sl-t-chico)/1 var(--sl-font-texto); white-space: nowrap;
+}
+.sl-chip.exito { color: var(--sl-exito); background: var(--sl-exito-fondo); }
+.sl-chip.alerta { color: var(--sl-alerta); background: var(--sl-alerta-fondo); }
+.sl-chip.error { color: var(--sl-error); background: var(--sl-error-fondo); }
+.sl-chip.info { color: var(--sl-info); background: var(--sl-info-fondo); }
+.sl-chip.neutro { color: var(--sl-gris); background: #EEF0F2; }
+
+/* Campos */
+.sl-campo { display: grid; gap: var(--sl-e1); }
+.sl-campo label { font-size: var(--sl-t-chico); font-weight: 600; color: var(--sl-azul-noche); }
+.sl-input {
+  min-height: var(--sl-toque); padding: 0 var(--sl-e4); border-radius: var(--sl-radio-chico);
+  border: 1.5px solid var(--sl-borde); background: #fff; font: inherit; color: inherit;
+}
+.sl-input:focus { outline: none; border-color: var(--sl-verde-agua); box-shadow: 0 0 0 3px rgba(62, 144, 128, .2); }
+
+/* Progreso */
+.sl-progreso { height: 8px; border-radius: var(--sl-radio-pastilla); background: var(--sl-bruma); overflow: hidden; }
+.sl-progreso > span { display: block; height: 100%; width: 100%; background: var(--sl-verde); border-radius: inherit; transform-origin: left; transition: transform var(--sl-dur-lenta) var(--sl-curva); }
+
+/* Teclas a la vista (computadora) */
+.sl-tecla {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 22px; height: 22px; padding: 0 6px;
+  border-radius: 6px; border: 1px solid var(--sl-borde); border-bottom-width: 2px; background: #fff;
+  font: 600 12px/1 var(--sl-font-texto); color: var(--sl-gris);
+}
+
+/* Aviso (toast) */
+.sl-aviso {
+  position: fixed; left: 50%; bottom: var(--sl-e6); transform: translate(-50%, 24px); opacity: 0;
+  display: flex; align-items: center; gap: var(--sl-e2); max-width: calc(100% - 32px);
+  padding: var(--sl-e3) var(--sl-e4); border-radius: var(--sl-radio); background: var(--sl-azul-noche); color: #fff;
+  box-shadow: var(--sl-sombra-3); font-size: var(--sl-t-chico); z-index: 1000; pointer-events: none;
+  transition: transform var(--sl-dur) var(--sl-curva), opacity var(--sl-dur);
+}
+.sl-aviso.visible { transform: translate(-50%, 0); opacity: 1; }
+
+/* Hoja que sube (celular) y diálogo (computadora) */
+.sl-velo { position: fixed; inset: 0; background: rgba(32, 55, 88, .4); opacity: 0; pointer-events: none; transition: opacity var(--sl-dur); z-index: 900; }
+.sl-velo.abierto { opacity: 1; pointer-events: auto; }
+.sl-hoja {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 901; background: #fff;
+  border-radius: var(--sl-radio-grande) var(--sl-radio-grande) 0 0; padding: var(--sl-e6) var(--sl-e4) var(--sl-e8);
+  transform: translateY(100%); transition: transform var(--sl-dur-lenta) var(--sl-curva); box-shadow: var(--sl-sombra-3);
+}
+.sl-hoja.abierta { transform: translateY(0); }
+
+/* Forma orgánica de marca (gota/hoja que entra desde un borde) */
+.sl-forma { position: absolute; width: 320px; height: 320px; border-radius: 100% 0 100% 100%; background: var(--sl-verde); opacity: .08; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition-duration: 1ms !important; }
+}

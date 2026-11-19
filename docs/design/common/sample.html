@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Muestra del lenguaje visual</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  body { padding: var(--sl-e8); position: relative; overflow: hidden; }
+  .grilla { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--sl-e6); max-width: 1100px; position: relative; }
+  .muestras { display: flex; flex-wrap: wrap; gap: var(--sl-e2); }
+  .muestras div { width: 88px; border-radius: var(--sl-radio-chico); overflow: hidden; box-shadow: var(--sl-sombra-1); background: #fff; font-size: var(--sl-t-chico); }
+  .muestras span { display: block; height: 48px; }
+  .muestras p { padding: 4px 8px; }
+  .fila { display: flex; flex-wrap: wrap; gap: var(--sl-e2); align-items: center; }
+  header { display: flex; align-items: center; gap: var(--sl-e4); margin-bottom: var(--sl-e8); position: relative; }
+  header img { width: 72px; height: 72px; border-radius: 50%; }
+  .num { font: 700 var(--sl-t-display)/1 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+</style>
+</head>
+<body>
+  <span class="sl-forma" style="right:-80px; top:-60px; opacity:.1"></span>
+  <header>
+    <img src="brand/logo-provisional.png" alt="Fundación San Lucas">
+    <div><span class="sl-placa">Lenguaje visual</span><h1 style="margin-top:8px">Fundación San Lucas · Becas</h1></div>
+  </header>
+  <div class="grilla">
+    <section class="sl-card" style="display:grid; gap:12px">
+      <h3>Color</h3>
+      <div class="muestras">
+        <div><span style="background:var(--sl-verde)"></span><p>Verde</p></div>
+        <div><span style="background:var(--sl-azul)"></span><p>Azul</p></div>
+        <div><span style="background:var(--sl-azul-noche)"></span><p>Azul noche</p></div>
+        <div><span style="background:var(--sl-verde-agua)"></span><p>Verde agua</p></div>
+        <div><span style="background:var(--sl-celeste)"></span><p>Celeste</p></div>
+        <div><span style="background:var(--sl-bruma)"></span><p>Bruma</p></div>
+      </div>
+    </section>
+    <section class="sl-card" style="display:grid; gap:12px">
+      <h3>Tipografía</h3>
+      <span class="num">8 de 10</span>
+      <h2>Montserrat para títulos</h2>
+      <p>Inter para el texto: «Tu camino a la universidad empieza acá».</p>
+      <p class="sl-chico">Texto secundario de 14 px, el mínimo.</p>
+    </section>
+    <section class="sl-card" style="display:grid; gap:12px">
+      <h3>Estados</h3>
+      <div class="fila">
+        <span class="sl-chip exito"><i data-icon="circle-check" data-size="16"></i>Aprobado</span>
+        <span class="sl-chip alerta"><i data-icon="triangle-alert" data-size="16"></i>Observado</span>
+        <span class="sl-chip info"><i data-icon="clock" data-size="16"></i>En revisión</span>
+        <span class="sl-chip neutro">Pendiente</span>
+        <span class="sl-chip error"><i data-icon="circle-alert" data-size="16"></i>Error</span>
+      </div>
+      <div class="sl-progreso"><span style="transform:scaleX(.62)"></span></div>
+      <p class="sl-chico">5 de 8 documentos listos</p>
+    </section>
+    <section class="sl-card" style="display:grid; gap:12px">
+      <h3>Botones</h3>
+      <div class="fila">
+        <button class="sl-btn sl-btn-primario"><i data-icon="camera" data-size="20"></i>Sacar foto</button>
+        <button class="sl-btn sl-btn-secundario">Subir archivo</button>
+        <button class="sl-btn sl-btn-texto">Más tarde</button>
+      </div>
+      <p class="sl-chico">Atajo: <span class="sl-tecla">Ctrl</span> <span class="sl-tecla">Enter</span></p>
+    </section>
+    <section class="sl-card" style="display:grid; gap:12px">
+      <h3>Campos</h3>
+      <div class="sl-campo"><label for="dni">Número de DNI</label><input id="dni" class="sl-input" value="44.218.903"></div>
+    </section>
+    <section class="sl-card" style="display:grid; gap:12px; background:var(--sl-bruma); box-shadow:none">
+      <h3>Voz</h3>
+      <p>«¡Vas muy bien! Te quedan 2 pasos.»</p>
+      <p>«Necesitamos que vuelvas a subir tu constancia: la foto salió borrosa.»</p>
+    </section>
+  </div>
+  <script src="icons.js"></script>
+</body>
+</html>

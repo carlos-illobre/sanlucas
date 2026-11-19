@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marco computadora – App del postulante</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  /* Marco base de la app del postulante en la computadora (1366 × 768). Las maquetas pueden copiarlo o romperlo. */
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .barra { display: flex; align-items: center; gap: var(--sl-e4); height: 64px; padding: 0 var(--sl-e8); background: var(--sl-superficie); box-shadow: var(--sl-sombra-1); }
+  .barra img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+  .marca { font: 700 var(--sl-t-h3)/1.1 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .marca small { display: block; font: 500 var(--sl-t-chico)/1.2 var(--sl-font-texto); color: var(--sl-gris); }
+  .barra nav { margin-left: auto; display: flex; gap: var(--sl-e2); }
+  .barra nav a { padding: var(--sl-e2) var(--sl-e4); border-radius: var(--sl-radio-chico); color: var(--sl-gris); text-decoration: none; font-weight: 600; }
+  .barra nav a[aria-current] { color: var(--sl-verde); background: var(--sl-bruma); }
+  main { flex: 1; width: min(1120px, 100% - 64px); margin: var(--sl-e8) auto; display: grid; gap: var(--sl-e6); align-content: start; }
+</style>
+</head>
+<body>
+  <header class="barra">
+    <img src="brand/logo-provisional.png" alt="Fundación San Lucas">
+    <div class="marca">Fundación San Lucas<small>Becas universitarias</small></div>
+    <nav aria-label="Navegación principal">
+      <a href="#" data-ir="home">Inicio</a>
+      <a href="#" aria-current="page" data-ir="application">Mi postulación</a>
+      <a href="#" data-ir="profile">Perfil</a>
+    </nav>
+  </header>
+  <main>
+    <section class="sl-card"><h2>Contenido de la pantalla</h2><p class="sl-chico">En la computadora hay más densidad, textos que explican y atajos de teclado a la vista (<span class="sl-tecla">Ctrl</span> <span class="sl-tecla">Enter</span>).</p></section>
+  </main>
+  <script src="icons.js"></script>
+  <script src="navigate.js" defer></script>
+</body>
+</html>

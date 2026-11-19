@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Marco celular – App del postulante</title>
+<link rel="stylesheet" href="common.css">
+<style>
+  /* Marco base de la app del postulante en el celular (390 px). Las maquetas pueden copiarlo o romperlo. */
+  body { max-width: 390px; margin: 0 auto; min-height: 100vh; display: flex; flex-direction: column; background: var(--sl-fondo); position: relative; overflow-x: hidden; }
+  .barra { display: flex; align-items: center; gap: var(--sl-e3); padding: var(--sl-e3) var(--sl-e4); background: var(--sl-superficie); box-shadow: var(--sl-sombra-1); position: sticky; top: 0; z-index: 10; }
+  .barra img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .barra .titulo { flex: 1; font: 700 var(--sl-t-h3)/1.2 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .icono-btn { width: var(--sl-toque); height: var(--sl-toque); display: grid; place-items: center; border: 0; background: transparent; color: var(--sl-azul-noche); border-radius: var(--sl-radio); cursor: pointer; }
+  main { flex: 1; padding: var(--sl-e4); display: grid; gap: var(--sl-e4); align-content: start; }
+  .abajo { display: flex; justify-content: space-around; background: var(--sl-superficie); box-shadow: 0 -1px 0 var(--sl-borde); padding: var(--sl-e2) 0 var(--sl-e3); position: sticky; bottom: 0; }
+  .abajo a { display: grid; justify-items: center; gap: 2px; min-width: 72px; color: var(--sl-gris); text-decoration: none; font-size: var(--sl-t-chico); font-weight: 600; }
+  .abajo a[aria-current] { color: var(--sl-verde); }
+</style>
+</head>
+<body>
+  <header class="barra">
+    <img src="brand/logo-provisional.png" alt="Fundación San Lucas">
+    <span class="titulo">Mi postulación</span>
+    <button class="icono-btn" aria-label="Avisos" data-ir="notifications"><i data-icon="bell"></i></button>
+  </header>
+  <main>
+    <section class="sl-card"><h2>Contenido de la pantalla</h2><p class="sl-chico">El marco tiene una barra arriba con el logo y una barra de navegación abajo, bajo el pulgar.</p></section>
+  </main>
+  <nav class="abajo" aria-label="Navegación principal">
+    <a href="#" data-ir="home"><i data-icon="house"></i>Inicio</a>
+    <a href="#" aria-current="page" data-ir="application"><i data-icon="file-text"></i>Postulación</a>
+    <a href="#" data-ir="profile"><i data-icon="user"></i>Perfil</a>
+  </nav>
+  <script src="icons.js"></script>
+  <script src="navigate.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Visor de maquetas</title>
+<link rel="stylesheet" href="common/common.css">
+<style>
+  body { display: grid; grid-template-columns: 280px 1fr; height: 100vh; overflow: hidden; }
+  aside { background: var(--sl-superficie); border-right: 1px solid var(--sl-borde); padding: var(--sl-e4); overflow-y: auto; display: grid; gap: var(--sl-e4); align-content: start; }
+  .marca { display: flex; align-items: center; gap: var(--sl-e3); }
+  .marca img { width: 40px; height: 40px; border-radius: 50%; }
+  .marca b { font-family: var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .seg { display: flex; background: var(--sl-fondo); border-radius: var(--sl-radio); padding: 4px; }
+  .seg button { flex: 1; min-height: 40px; border: 0; background: transparent; border-radius: var(--sl-radio-chico); font: 600 var(--sl-t-chico) var(--sl-font-texto); color: var(--sl-gris); cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: #fff; color: var(--sl-verde); box-shadow: var(--sl-sombra-1); }
+  .pantalla h3 { margin-bottom: var(--sl-e2); }
+  .pantalla button { display: block; width: 100%; text-align: left; padding: var(--sl-e2) var(--sl-e3); border: 0; background: transparent; border-radius: var(--sl-radio-chico); font: 500 var(--sl-t-chico)/1.3 var(--sl-font-texto); color: var(--sl-texto); cursor: pointer; }
+  .pantalla button:hover { background: var(--sl-fondo); }
+  .pantalla button[aria-current="true"] { background: var(--sl-bruma); color: var(--sl-verde); font-weight: 700; }
+  main { overflow: auto; display: grid; place-items: start center; padding: var(--sl-e6); gap: var(--sl-e3); }
+  .info { width: 100%; display: flex; gap: var(--sl-e3); align-items: center; justify-content: space-between; }
+  .info a { color: var(--sl-verde); font-weight: 600; font-size: var(--sl-t-chico); }
+  .lienzo { background: #fff; box-shadow: var(--sl-sombra-3); border-radius: var(--sl-radio); overflow: hidden; transform-origin: top center; }
+  .lienzo.phone { border-radius: 36px; border: 10px solid var(--sl-azul-noche); }
+  iframe { display: block; border: 0; }
+  .vacio { color: var(--sl-gris); padding: var(--sl-e10); text-align: center; }
+</style>
+</head>
+<body>
+  <aside>
+    <div class="marca"><img src="common/brand/logo-provisional.png" alt=""><b>Maquetas<br><span class="sl-chico" style="font-family:var(--sl-font-texto)">Fundación San Lucas</span></b></div>
+    <div class="seg" role="group" aria-label="Dispositivo">
+      <button data-device="phone" aria-pressed="true"><i data-icon="smartphone" data-size="16"></i> Celular</button>
+      <button data-device="desktop" aria-pressed="false">Computadora</button>
+    </div>
+    <div id="lista"></div>
+    <p class="sl-chico"><a href="visual-language.md">Lenguaje visual</a> · <a href="common/sample.html" target="_blank">Muestra</a></p>
+  </aside>
+  <main>
+    <div class="info"><h2 id="titulo">Cargando…</h2><a id="abrir" href="#" target="_blank">Abrir sola ↗</a></div>
+    <div id="lienzo" class="lienzo phone"><div class="vacio">Elegí una pantalla.</div></div>
+  </main>
+  <script src="common/icons.js"></script>
+  <script>
+    const estado = { device: 'phone', screen: null, variant: 0, datos: { screens: [] } };
+    const lista = document.getElementById('lista');
+    const params = new URLSearchParams(location.hash.slice(1));
+    function ruta(v) { return 'mockups/' + v.path.replace('{device}', estado.device); }
+    function pintarLista() {
+      lista.innerHTML = '';
+      estado.datos.screens.forEach(s => {
+        const sec = document.createElement('section'); sec.className = 'pantalla';
+        sec.innerHTML = '<h3>' + s.title + '</h3>';
+        s.variants.forEach((v, i) => {
+          const b = document.createElement('button'); b.textContent = v.name;
+          b.setAttribute('aria-current', s.id === estado.screen && i === estado.variant);
+          b.onclick = () => { estado.screen = s.id; estado.variant = i; mostrar(); };
+          sec.appendChild(b);
+        });
+        lista.appendChild(sec);
+      });
+    }
+    function mostrar() {
+      const s = estado.datos.screens.find(x => x.id === estado.screen);
+      const lienzo = document.getElementById('lienzo');
+      lienzo.className = 'lienzo ' + estado.device;
+      if (!s) { document.getElementById('titulo').textContent = 'Sin maquetas todavía'; lienzo.innerHTML = '<div class="vacio">Todavía no hay pantallas en mockups/index.json.</div>'; pintarLista(); return; }
+      const v = s.variants[estado.variant] || s.variants[0];
+      const src = ruta(v);
+      const [w, h] = estado.device === 'phone' ? [390, 844] : [1366, 768];
+      lienzo.innerHTML = '<iframe title="' + s.title + '" src="' + src + '" width="' + w + '" height="' + h + '"></iframe>';
+      const disponible = document.querySelector('main').clientWidth - 48;
+      lienzo.style.transform = w > disponible ? 'scale(' + (disponible / w) + ')' : '';
+      document.getElementById('titulo').textContent = s.title + ' · ' + v.name;
+      document.getElementById('abrir').href = src;
+      location.hash = 'screen=' + s.id + '&variant=' + estado.variant + '&device=' + estado.device;
+      pintarLista();
+    }
+    document.querySelectorAll('[data-device]').forEach(b => b.onclick = () => {
+      estado.device = b.dataset.device;
+      document.querySelectorAll('[data-device]').forEach(x => x.setAttribute('aria-pressed', x === b));
+      mostrar();
+    });
+    window.addEventListener('message', ev => {
+      if (!ev.data || ev.data.tipo !== 'sl-ir') return;
+      const s = estado.datos.screens.find(x => x.id === ev.data.pantalla);
+      if (s) { estado.screen = s.id; estado.variant = 0; mostrar(); }
+      else { document.getElementById('titulo').textContent = 'La pantalla «' + ev.data.pantalla + '» todavía no tiene maqueta'; }
+    });
+    window.addEventListener('resize', mostrar);
+    fetch('mockups/index.json').then(r => r.json()).then(d => {
+      estado.datos = d;
+      estado.device = params.get('device') || 'phone';
+      document.querySelectorAll('[data-device]').forEach(x => x.setAttribute('aria-pressed', x.dataset.device === estado.device));
+      estado.screen = params.get('screen') || (d.screens[0] && d.screens[0].id);
+      estado.variant = +(params.get('variant') || 0);
+      mostrar();
+    }).catch(() => { document.getElementById('titulo').textContent = 'Abrí el visor con un servidor (python3 -m http.server) o desde GitHub Pages.'; });
+  </script>
+</body>
+</html>
