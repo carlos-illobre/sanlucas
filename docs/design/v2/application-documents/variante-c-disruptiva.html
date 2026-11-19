@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P14 Documentación · Variante C · La ronda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Inter";src:url("../../common/fonts/inter-variable.woff2") format("woff2");font-weight:100 900}
+/* ===== TOKENS · Variante C "La ronda" =====
+   Sistema: luz sobre noche. Todo se mide en "luz" (0 a 1) y en distancia al centro del círculo. */
+:root{
+  --c-night:#06111D; --c-night-2:#0C1E31; --c-ink:#F4EBD3; --c-ink-2:rgba(244,235,211,.62); --c-ink-3:rgba(244,235,211,.32);
+  --c-glow:#7FE6CB; --c-glow-2:#91BEC6; --c-warm:#FFB547; --c-hand:#3E9080; --c-line:rgba(244,235,211,.14);
+  --c-serif:"Instrument Serif",Georgia,"Times New Roman",serif; --c-sans:"Inter",system-ui,sans-serif;
+  --c-u:8px;                      /* unidad única */
+  --c-breath:3.2s;                /* ritmo de "respiración" de lo pendiente */
+  --c-arrive:900ms; --c-ease:cubic-bezier(.2,.9,.1,1.2);
+  --c-piece:#FF7A45;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--c-night);color:var(--c-ink);font-family:var(--c-sans)}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.page{display:grid;grid-template-columns:minmax(280px,1fr) 390px minmax(300px,1fr);gap:calc(var(--c-u)*6);padding:calc(var(--c-u)*5) calc(var(--c-u)*5) calc(var(--c-u)*8);min-height:100vh;align-items:start}
+.manifesto h1{font-family:var(--c-serif);font-weight:400;font-size:64px;line-height:.95;letter-spacing:-.02em}
+.manifesto h1 i{color:var(--c-glow)}
+.manifesto .lede{font-size:15px;line-height:1.5;color:var(--c-ink-2);margin:calc(var(--c-u)*2) 0 calc(var(--c-u)*4);max-width:44ch}
+.chapters{list-style:none;display:grid;gap:2px;counter-reset:ch}
+.chapters button{width:100%;text-align:left;display:grid;grid-template-columns:40px 1fr;gap:calc(var(--c-u)*1.5);padding:calc(var(--c-u)*1.5) calc(var(--c-u)*1.5);border-radius:14px;align-items:baseline;transition:background .3s}
+.chapters button:hover{background:rgba(244,235,211,.05)}
+.chapters button[aria-current=true]{background:rgba(127,230,203,.09)}
+.chapters .k{font-family:var(--c-serif);font-size:28px;color:var(--c-ink-3)}
+.chapters [aria-current=true] .k{color:var(--c-glow)}
+.chapters b{display:block;font-size:16px;font-weight:600}
+.chapters span.s{font-size:13px;color:var(--c-ink-2);line-height:1.4}
+.toggle{margin-top:calc(var(--c-u)*3);font-size:13px;color:var(--c-ink-2);display:flex;gap:8px;align-items:center}
+.phone{width:390px;height:844px;border-radius:52px;position:sticky;top:calc(var(--c-u)*3);overflow:hidden;background:var(--c-night);box-shadow:0 0 0 10px #141c26,0 0 0 11px #2a3644,0 40px 120px rgba(127,230,203,.10)}
+.screen{position:absolute;inset:0;opacity:0;pointer-events:none;transition:opacity .5s}
+.screen.on{opacity:1;pointer-events:auto}
+.sb{position:absolute;top:14px;left:30px;right:30px;display:flex;justify-content:space-between;font-size:13px;font-weight:600;color:var(--c-ink-2);z-index:5}
+.side h2{font-family:var(--c-serif);font-weight:400;font-size:36px;line-height:1;margin-bottom:calc(var(--c-u)*1.5)}
+.side p{font-size:14px;line-height:1.55;color:var(--c-ink-2)}
+.side p+p{margin-top:var(--c-u)}
+.side .blk{border-top:1px solid var(--c-line);padding-top:calc(var(--c-u)*2);margin-top:calc(var(--c-u)*2.5)}
+.side h3{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--c-ink-3);margin-bottom:var(--c-u)}
+.sim{display:flex;flex-wrap:wrap;gap:var(--c-u)}
+.sim button,.sim label{font-size:13px;padding:10px 14px;border-radius:999px;border:1px dashed var(--c-piece);color:var(--c-piece)}
+.sim input[type=range]{width:100%;accent-color:var(--c-glow)}
+.breaks{list-style:none;display:grid;gap:6px;font-size:13px;line-height:1.45;color:var(--c-ink-2)}
+.breaks li::before{content:"✕ ";color:var(--c-warm)}
+.score{width:100%;border-collapse:collapse;font-size:13px;color:var(--c-ink-2)}
+.score td{padding:6px 0;border-bottom:1px solid var(--c-line);vertical-align:top}
+.score td:first-child{color:var(--c-ink);width:42%}
+.score button{color:var(--c-glow);font-size:12px;text-decoration:underline}
+body.piezas [data-pieza]{outline:1px dashed var(--c-piece);outline-offset:-1px}
+body.piezas [data-pieza]::after{content:attr(data-pieza);position:absolute;top:0;left:0;z-index:50;background:var(--c-piece);color:#fff;font:600 11px/16px var(--c-sans);padding:0 4px;pointer-events:none;white-space:nowrap}
+
+/* --- 1 La ronda --- */
+.ronda{position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 42%,#10304a 0%,var(--c-night) 70%)}
+.ronda #ring{position:absolute;left:0;top:90px;width:390px;height:520px;overflow:visible}
+.petal{transition:fill .8s,opacity .8s,transform var(--c-arrive) var(--c-ease)}
+.petal.pend{animation:breath var(--c-breath) ease-in-out infinite}
+.petal.obs{animation:warm 1.6s ease-in-out infinite}
+@keyframes breath{50%{opacity:.35}}
+@keyframes warm{50%{filter:drop-shadow(0 0 10px var(--c-warm))}}
+.petal.arrive{animation:arrive var(--c-arrive) var(--c-ease)}
+@keyframes arrive{0%{transform:scale(.2);opacity:0}100%{transform:scale(1);opacity:1}}
+.center-n{position:absolute;left:0;right:0;top:360px;text-align:center;pointer-events:none}
+.center-n .n{font-family:var(--c-serif);font-size:96px;line-height:.8;color:var(--c-night);mix-blend-mode:normal}
+.center-n .w{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--c-night);font-weight:700;margin-top:6px}
+.ronda .whisper{position:absolute;left:28px;right:28px;bottom:150px;font-family:var(--c-serif);font-size:30px;line-height:1.05}
+.ronda .whisper i{color:var(--c-warm)}
+.ronda .dock{position:absolute;left:20px;right:20px;bottom:36px;display:grid;grid-template-columns:1fr 76px 1fr;align-items:center}
+.eye{width:76px;height:76px;border-radius:50%;background:var(--c-ink);color:var(--c-night);display:grid;place-items:center;box-shadow:0 0 0 8px rgba(244,235,211,.08),0 0 40px rgba(127,230,203,.35)}
+.dock .l,.dock .r{font-size:12px;color:var(--c-ink-2);display:grid;gap:4px;justify-items:center;text-align:center}
+.dock .r{justify-self:end}.dock .l{justify-self:start}
+.ico{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* --- 2 Visor universal --- */
+.visor{position:absolute;inset:0;background:radial-gradient(90% 60% at 40% 55%,#4a4032,#18140f)}
+.table-wood{position:absolute;inset:0;background:repeating-linear-gradient(98deg,rgba(255,255,255,.025) 0 3px,transparent 3px 14px)}
+.paper{position:absolute;background:#f6f1e6;box-shadow:0 18px 40px rgba(0,0,0,.45);border-radius:2px}
+.paper .ln{position:absolute;left:10%;height:4px;border-radius:2px;background:#8b8577}
+.paper.recibo{left:70px;top:190px;width:230px;height:300px;transform:rotate(-7deg)}
+.lock{position:absolute;left:62px;top:180px;width:250px;height:322px;transform:rotate(-7deg);border:2px solid var(--c-glow);border-radius:6px;box-shadow:0 0 0 2000px rgba(6,17,29,.35),0 0 30px rgba(127,230,203,.5);transition:all .6s var(--c-ease)}
+.whatis{position:absolute;left:16px;right:16px;bottom:28px;background:rgba(6,17,29,.82);backdrop-filter:blur(18px);border-radius:28px;padding:20px;display:grid;gap:14px}
+.whatis .q{font-family:var(--c-serif);font-size:30px;line-height:1}
+.whatis .q i{color:var(--c-glow)}
+.whatis .meta{font-size:12px;color:var(--c-ink-2)}
+.who{display:flex;gap:8px;flex-wrap:wrap}
+.who button{padding:10px 14px;border-radius:999px;border:1px solid var(--c-line);font-size:14px}
+.who button.sug{background:var(--c-glow);color:var(--c-night);border-color:var(--c-glow);font-weight:600}
+.scanline{position:absolute;left:62px;width:250px;height:2px;background:var(--c-glow);top:180px;box-shadow:0 0 16px var(--c-glow);animation:scan 2.2s ease-in-out infinite;transform:rotate(-7deg)}
+@keyframes scan{50%{top:500px}}
+
+/* --- 3 Nivel de mesa --- */
+.nivel{position:absolute;inset:0;background:#0b0f0c}
+.nivel .feed{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 50%,#3d3527,#120f0b)}
+.nivel .paper{left:60px;top:200px;width:270px;height:360px;transition:transform .2s}
+.bubble-ring{position:absolute;left:50%;top:380px;width:200px;height:200px;margin:-100px 0 0 -100px;border-radius:50%;border:2px solid var(--c-glow-2);background:rgba(6,17,29,.45);backdrop-filter:blur(2px)}
+.bubble-ring::before{content:"";position:absolute;inset:80px;border-radius:50%;border:1.5px dashed rgba(244,235,211,.6)}
+.bubble{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:rgba(244,235,211,.9);transition:transform .15s,background .3s}
+.bubble.ok{background:var(--c-glow);box-shadow:0 0 30px var(--c-glow)}
+.nivel .say{position:absolute;left:24px;right:24px;top:80px;font-family:var(--c-serif);font-size:34px;line-height:1;text-align:center}
+.nivel .deg{position:absolute;left:0;right:0;bottom:120px;text-align:center;font-size:13px;color:var(--c-ink-2);letter-spacing:.1em}
+.nivel .count{position:absolute;left:0;right:0;bottom:60px;text-align:center;font-family:var(--c-serif);font-size:48px;color:var(--c-glow);min-height:50px}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none}
+.flash.go{animation:fl .5s ease-out}
+@keyframes fl{0%{opacity:.9}100%{opacity:0}}
+
+/* --- 4 Pasale la mano --- */
+.mano{position:absolute;inset:0;background:var(--c-night-2);padding:70px 28px 0}
+.mano h4{font-family:var(--c-serif);font-weight:400;font-size:40px;line-height:.95}
+.mano h4 i{color:var(--c-glow)}
+.mano p{font-size:14px;color:var(--c-ink-2);line-height:1.45;margin-top:10px}
+.qr{width:220px;height:220px;margin:26px auto 18px;background:var(--c-ink);border-radius:28px;padding:18px;display:grid;grid-template-columns:repeat(21,1fr);gap:0}
+.qr i{background:var(--c-night)}
+.qr i.o{background:transparent}
+.mano .alt{display:flex;gap:10px;justify-content:center}
+.mano .alt button{padding:12px 16px;border-radius:999px;border:1px solid var(--c-line);font-size:14px}
+.mano .tarde{margin-top:22px;border:1px solid var(--c-line);border-radius:20px;padding:14px 16px;font-size:13px;color:var(--c-ink-2);line-height:1.4}
+.mano .tarde b{color:var(--c-ink);font-weight:600}
+.mini{position:relative;margin-top:16px;width:100%;border-radius:22px;background:var(--c-ink);color:var(--c-night);padding:16px;font-size:14px;line-height:1.4}
+.mini b{font-family:var(--c-serif);font-size:22px;font-weight:400;display:block;line-height:1.05;margin-bottom:6px}
+.mini .big{margin-top:10px;display:grid;gap:8px}
+.mini .big span{display:block;background:var(--c-night);color:var(--c-ink);border-radius:14px;padding:12px;font-weight:600}
+
+/* --- 5 Voz --- */
+.voz{position:absolute;inset:0;background:radial-gradient(80% 50% at 50% 30%,#2b2213,var(--c-night) 70%);padding:70px 26px 0}
+.voz .tag{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--c-warm)}
+.voz .said{font-family:var(--c-serif);font-size:28px;line-height:1.12;margin-top:12px;min-height:200px}
+.voz .said .dim{color:var(--c-ink-3)}
+.wave{display:flex;gap:4px;align-items:center;height:70px;justify-content:center;margin:10px 0}
+.wave i{width:4px;border-radius:2px;background:var(--c-warm);height:10px;transition:height .12s}
+.dj{background:var(--c-ink);color:var(--c-night);border-radius:24px;padding:16px 18px;font-size:13px;line-height:1.35;opacity:0;transform:translateY(20px);transition:all .6s var(--c-ease)}
+.dj.on{opacity:1;transform:none}
+.dj h5{font-family:var(--c-serif);font-size:22px;font-weight:400;margin-bottom:8px}
+.dj dl{display:grid;grid-template-columns:auto 1fr;gap:4px 12px}
+.dj dt{color:#6b6455}
+.dj .firma{margin-top:12px;height:56px;border:1.5px dashed #6b6455;border-radius:12px;display:grid;place-items:center;color:#6b6455;font-family:var(--c-serif);font-size:20px;font-style:italic}
+
+/* --- 6 Conversación --- */
+.charla{position:absolute;inset:0;background:var(--c-night);padding:64px 18px 0;display:flex;flex-direction:column;gap:12px}
+.charla .hd{display:flex;gap:12px;align-items:center;padding:0 6px 10px;border-bottom:1px solid var(--c-line)}
+.av{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--c-hand),var(--c-glow-2));display:grid;place-items:center;font-family:var(--c-serif);font-size:22px;color:var(--c-night)}
+.charla .hd b{display:block;font-size:15px}.charla .hd span{font-size:12px;color:var(--c-ink-2)}
+.msg{max-width:84%;padding:12px 14px;border-radius:20px;font-size:15px;line-height:1.4}
+.msg.them{background:var(--c-night-2);border-bottom-left-radius:6px}
+.msg.me{background:var(--c-glow);color:var(--c-night);align-self:flex-end;border-bottom-right-radius:6px}
+.crop{margin-top:8px;height:90px;border-radius:12px;background:#f6f1e6;position:relative;overflow:hidden}
+.crop .ln{position:absolute;left:10%;height:4px;border-radius:2px;background:#8b8577;filter:blur(1.8px)}
+.charla .reply{margin-top:auto;margin-bottom:30px;display:grid;grid-template-columns:1fr 56px;gap:10px}
+.charla .reply button{height:56px;border-radius:999px;background:var(--c-ink);color:var(--c-night);font-weight:600;font-size:15px}
+.charla .reply button.mic{background:var(--c-night-2);color:var(--c-ink);display:grid;place-items:center}
+
+/* --- 7 Cierre --- */
+.cierre{position:absolute;inset:0;background:radial-gradient(70% 45% at 50% 42%,#164a52,var(--c-night) 75%)}
+.cierre #ring2{position:absolute;left:0;top:90px;width:390px;height:520px;overflow:visible}
+.cierre.open .petal{transform:scale(1.25) rotate(8deg)}
+.hold{position:absolute;left:50%;top:405px;z-index:2;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;display:grid;place-items:center;text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--c-night);font-weight:700;touch-action:none;user-select:none}
+.hold svg{position:absolute;inset:0;top:0;width:150px;height:150px}
+.cierre .whisper{position:absolute;left:28px;right:28px;bottom:70px;font-family:var(--c-serif);font-size:32px;line-height:1.05;text-align:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media (max-width:1100px){.page{grid-template-columns:1fr}.phone{position:relative;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="page">
+  <section class="manifesto">
+    <h1>Los papeles no se cargan.<br><i>Se juntan en ronda.</i></h1>
+    <p class="lede">El problema real de P14 no es subir archivos: es que los papeles los tiene la familia, la escuela y ANSES, y que nadie sabe si "está bien" hasta días después. La ronda convierte el trámite en un círculo de manos que se ilumina cuando cada integrante aporta lo suyo, con la cámara como única puerta de entrada.</p>
+    <ol class="chapters" id="chapters"></ol>
+    <label class="toggle"><input type="checkbox" id="tgl"> Mostrar rótulos de piezas</label>
+  </section>
+
+  <div class="phone" id="phone">
+    <div class="sb"><span>15:06</span><span>4G · 62%</span></div>
+
+    <div class="screen" data-s="ronda" data-pieza="C-01 la ronda de manos">
+      <div class="ronda"><svg id="ring" viewBox="0 0 390 520"></svg>
+        <div class="center-n"><div class="n" id="cn">6</div><div class="w">de 9 manos</div></div>
+        <div class="whisper" id="whisper">Falta <i>la mano de tu mamá</i> y una foto que salió movida.</div>
+        <div class="dock"><button class="l" data-go="mano"><svg class="ico" viewBox="0 0 24 24"><path d="M7 11V6a2 2 0 0 1 4 0v5M11 10V4a2 2 0 0 1 4 0v6M15 10V6a2 2 0 0 1 4 0v8a7 7 0 0 1-7 7h-1a7 7 0 0 1-6-3.5L3 14a2 2 0 0 1 3.4-2l.6 1"/></svg>Pasar la mano</button>
+          <button class="eye" data-go="visor" aria-label="Mostrame un papel"><svg class="ico" viewBox="0 0 24 24" style="width:30px;height:30px"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+          <button class="r" data-go="voz"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg>Contarlo</button></div>
+      </div>
+    </div>
+
+    <div class="screen" data-s="visor" data-pieza="C-02 visor universal que reconoce el papel">
+      <div class="visor"><div class="table-wood"></div>
+        <div class="paper recibo"><div class="ln" style="top:24px;width:40%;background:#203758;height:7px"></div><div class="ln" style="top:44px;width:62%"></div><div class="ln" style="top:70px;width:80%"></div><div class="ln" style="top:86px;width:74%"></div><div class="ln" style="top:118px;width:30%;background:#1c1c1c"></div><div class="ln" style="top:150px;width:78%"></div><div class="ln" style="top:166px;width:70%"></div><div class="ln" style="top:240px;width:34%;background:#1c1c1c;height:8px"></div></div>
+        <div class="lock"></div><div class="scanline" id="scanline"></div>
+        <div class="whatis" id="whatis"><div class="meta">Lo reconocí sin que me digas nada</div><div class="q">Esto es un <i>recibo de sueldo</i>. Dice "Quiroga".</div><div class="meta">¿De quién es la mano?</div>
+          <div class="who"><button class="sug" data-act="assign">Mamá · María de los Ángeles</button><button>Thiago</button><button>Mío</button><button>Otra persona</button></div></div>
+      </div>
+    </div>
+
+    <div class="screen" data-s="nivel" data-pieza="C-03 nivel de mesa con disparo por inclinación">
+      <div class="nivel"><div class="feed"></div><div class="paper" id="nvpaper"><div class="ln" style="top:30px;width:45%;background:#203758;height:7px"></div><div class="ln" style="top:60px;width:80%"></div><div class="ln" style="top:80px;width:72%"></div><div class="ln" style="top:200px;width:70%;background:#1c1c1c"></div><div class="ln" style="top:220px;width:76%;background:#1c1c1c"></div><div class="ln" style="top:240px;width:66%;background:#1c1c1c"></div></div>
+        <div class="say" id="nvsay">Acostá el celular<br>sobre la hoja</div>
+        <div class="bubble-ring"><div class="bubble" id="bub"></div></div>
+        <div class="deg" id="deg">INCLINACIÓN 18°</div><div class="count" id="cnt"></div><div class="flash" id="flash"></div></div>
+    </div>
+
+    <div class="screen" data-s="mano" data-pieza="C-04 pasar la mano a un familiar">
+      <div class="mano"><h4>Mamá, <i>esto es tuyo.</i></h4><p>Escaneá este código con tu celular. No hace falta bajar nada: vas a ver solo tus 2 papeles.</p>
+        <div class="qr" id="qr"></div>
+        <div class="alt"><button>Mandar por WhatsApp</button><button>Imprimir la lista</button></div>
+        <div class="mini" data-pieza="C-04b vista web del familiar"><b>Hola, María de los Ángeles.</b>Ailén se está postulando a una beca. Te pide:<div class="big"><span>Tu recibo de sueldo · sacale una foto</span><span>Tu DNI · ya está, ¡gracias!</span></div></div>
+        <div class="tarde" data-pieza="C-04c la tarde de los papeles"><b>La tarde de los papeles.</b> ¿Se juntan el domingo a las 17? Te armo la lista de qué tiene que traer cada uno y les aviso.</div>
+      </div>
+    </div>
+
+    <div class="screen" data-s="voz" data-pieza="C-05 declaración jurada contada con la voz">
+      <div class="voz"><div class="tag">Contalo con tu voz · ingresos sin recibo</div>
+        <div class="said" id="said"><span class="dim">Tocá y contá, como se lo contarías a alguien: qué hacés, cuántos días, cuánto te queda por mes.</span></div>
+        <div class="wave" id="wave"></div>
+        <div class="dj" id="dj"><h5>Declaración jurada de ingresos</h5><dl><dt>Quién</dt><dd>María de los Ángeles Quiroga Villafañe</dd><dt>Actividad</dt><dd>Limpieza en casas particulares</dd><dt>Frecuencia</dt><dd>Martes y viernes</dd><dt>Ingreso aprox.</dt><dd>$ 180.000 por mes</dd></dl><div class="firma">firmá acá con el dedo</div></div>
+      </div>
+    </div>
+
+    <div class="screen" data-s="charla" data-pieza="C-06 la observación como conversación">
+      <div class="charla"><div class="hd"><div class="av">M</div><div><b>Marta · Fundación San Lucas</b><span>revisa tu postulación</span></div></div>
+        <div class="msg them">Hola, Ailén. Ya vi casi todo, ¡vas bárbaro! Solo una cosa del analítico: esta parte se ve movida.<div class="crop"><div class="ln" style="top:20px;width:70%"></div><div class="ln" style="top:38px;width:74%"></div><div class="ln" style="top:56px;width:64%"></div></div></div>
+        <div class="msg them">¿Me la sacás de nuevo cuando puedas? Con luz de ventana sale perfecta.</div>
+        <div class="msg me" id="reply" style="display:none">¡Listo! Ahí te la mandé 🙌</div>
+        <div class="reply"><button data-act="redo">Sacarla de nuevo</button><button class="mic" aria-label="Responder con audio"><svg class="ico" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v4"/></svg></button></div>
+      </div>
+    </div>
+
+    <div class="screen" data-s="cierre" data-pieza="C-07 envío ritual: mantener apretado">
+      <div class="cierre" id="cierre"><svg id="ring2" viewBox="0 0 390 520"></svg>
+        <div class="hold" id="hold"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="70" fill="#F4EBD3"/><circle id="holdarc" cx="75" cy="75" r="70" fill="none" stroke="#06111D" stroke-width="6" stroke-dasharray="440" stroke-dashoffset="440" transform="rotate(-90 75 75)"/></svg><span style="position:relative">Mantené<br>apretado<br>para enviar</span></div>
+        <div class="whisper" id="cw">La ronda está completa.</div>
+      </div>
+    </div>
+  </div>
+
+  <aside class="side" id="side"></aside>
+</div>
+
+<script>
+/* ---------- Capítulos ---------- */
+const CH=[
+ {k:'ronda',t:'La ronda',s:'Un círculo de manos en lugar de una lista',
+  h:'Un círculo, no una lista',
+  p:['Cada documento obligatorio es una mano alrededor de la luz del logo. Las manos se agrupan por persona: las tuyas, las de tu mamá, las de Thiago, la de Luz. Lo que falta respira despacio; lo que hay que corregir brilla cálido; lo que está listo se enciende.','El número central no es un porcentaje: son manos. "6 de 9 manos" dice quién falta, no qué te falta.'],
+  b:['Rompe la lista con estados en texto ("5 de 8 documentos listos", regla 8): el avance se lee como luz.','Recrea el símbolo del logo como interfaz completa (la marca dice que nunca se recrea).','Fondo noche: rompe "calma por defecto, fondo claro".','Rótulos de 11 px dentro del círculo: rompe el mínimo de 14 px.']},
+ {k:'visor',t:'Mostrame un papel',s:'La cámara reconoce qué es y de quién',
+  h:'Una sola puerta: la cámara',
+  p:['No elegís "qué documento vas a cargar". Abrís el ojo, apuntás a cualquier papel que haya sobre la mesa y la app dice qué es ("un recibo de sueldo") y de quién parece (leyó "Quiroga"). Vos solo confirmás la mano.','Si el papel no sirve para nada de la convocatoria, lo dice al instante: "esto es una boleta de luz vieja, buscá una de los últimos 3 meses".'],
+  b:['Elimina el paso "elegir documento → elegir fuente" (requerimiento de cargar cada uno por separado).','Clasificación con IA en el dispositivo o en el servidor: agrega una funcionalidad que no está en los requerimientos.','La IA propone, la persona confirma: sigue sin decidir nada sobre la beca.']},
+ {k:'nivel',t:'Nivel de mesa',s:'Inclinar el celular es el disparador',
+  h:'El celular es un nivel de burbuja',
+  p:['La mayoría de las fotos salen mal por el ángulo. Acá el giroscopio es el input: cuando el celular queda paralelo a la mesa y quieto, la burbuja se pone verde y dispara solo. No hay botón.','Usá el control de la derecha para simular la inclinación. En un celular real, tocá "Usar el giroscopio".'],
+  b:['Giroscopio como input principal (en A y B estaba afuera por no eliminar pasos).','En web exige DeviceOrientationEvent.requestPermission() con un gesto en Safari iOS [VERIFICAR].','Sin botón de disparo visible: rompe la convención de cámara.']},
+ {k:'mano',t:'Pasar la mano',s:'Cada familiar aporta lo suyo desde su celular',
+  h:'La postulación deja de ser de una sola persona',
+  p:['Los papeles de la mamá los tiene la mamá. Con un QR o un link por WhatsApp, ella abre una página web sin instalar nada y ve solo sus 2 papeles. Cuando sube su recibo, su mano se enciende en el círculo de Ailén.','"La tarde de los papeles" convierte las varias sesiones sueltas en un encuentro: un domingo, 20 minutos, cada uno con lo suyo.'],
+  b:['El requerimiento asume un solo usuario (el postulante): acá hay colaboradores.','Datos de terceros con acceso parcial: obliga a repensar el consentimiento de la Ley 25.326 (cada integrante consiente lo suyo).','Una vista web sin app ni cuenta: sale del stack de app única.']},
+ {k:'voz',t:'Contarlo',s:'La declaración jurada se dice, no se escribe',
+  h:'Una changa no tiene recibo',
+  p:['Para ingresos informales, el formulario de declaración jurada es la peor barrera. Acá se cuenta con la voz, como en un audio de WhatsApp, y la app arma la declaración para firmar con el dedo.','El documento deja de ser un archivo que hay que conseguir: se genera.'],
+  b:['Un documento requerido se reemplaza por uno generado en la app.','Micrófono y transcripción como canal principal.','La Fundación tendría que aceptar una DJ firmada digitalmente (a validar).']},
+ {k:'charla',t:'Marta te escribe',s:'La observación es una persona, no un estado',
+  h:'"Observado" suena a error. Marta, no.',
+  p:['La observación llega como un mensaje de una persona de la Fundación, con el recorte exacto de lo que no se lee. Se responde sacando la foto de nuevo o con un audio.','Dignidad: alguien te mira y te acompaña, en vez de un chip ámbar.'],
+  b:['Reemplaza el estado "observado" por una conversación: el panel de administración necesitaría un canal de mensajes.','Pone nombre propio a quien revisa: decisión de la Fundación.','Usa emoji en el texto del postulante (fuera de la guía de A y B).']},
+ {k:'cierre',t:'La ronda se cierra',s:'Enviar es un ritual de tres segundos',
+  h:'Las manos se abren',
+  p:['Con las 9 manos encendidas, el centro pide que lo mantengas apretado. Al soltar, las manos se abren (la animación del logo que el lenguaje visual reservaba para los logros) y suena un acorde que sube.','No es un botón "Enviar": es un gesto que se recuerda.'],
+  b:['Junta P14 con el envío (P15/P16): fusiona tres pantallas.','Mantener apretado en vez de un toque: rompe la convención de acción primaria visible.','Sonido como confirmación.']}
+];
+const SCORE=[['Hoja detectada','un toc grave',[220]],['Mano encendida','dos notas que suben',[440,660]],['Para corregir','una nota que baja',[330,247]],['La ronda completa','acorde que se abre',[262,330,392,523]]];
+
+/* ---------- Sonido (WebAudio real) y háptica (si existe) ---------- */
+let AC;function tone(freqs){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();freqs.forEach((f,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=f;const t=AC.currentTime+i*.12;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.6);o.connect(g).connect(AC.destination);o.start(t);o.stop(t+.7)});}catch(e){} if(navigator.vibrate)try{navigator.vibrate(freqs.map(()=>30))}catch(e){}}
+
+/* ---------- El círculo ---------- */
+const GROUPS=[{n:'VOS',docs:[['DNI','aprobado'],['CUIL','revision'],['Analítico','observado']]},{n:'HOGAR',docs:[['Factura','cargado']]},{n:'MAMÁ',docs:[['Ingresos','pendiente'],['DNI','aprobado']]},{n:'THIAGO',docs:[['Ingresos','cargado'],['DNI','pendiente']]},{n:'LUZ',docs:[['DNI','revision']]}];
+function ring(svg,state,full){
+  const cx=195,cy=315,r0=60,len=94; let html=`<defs><radialGradient id="core"><stop offset="0" stop-color="#FFFFFF"/><stop offset=".55" stop-color="#F4EBD3"/><stop offset="1" stop-color="#91BEC6" stop-opacity="0"/></radialGradient><linearGradient id="lit" x1="0" x2="1"><stop offset="0" stop-color="#3E9080"/><stop offset="1" stop-color="#7FE6CB"/></linearGradient></defs>`;
+  html+=`<circle cx="${cx}" cy="${cy}" r="${r0+40}" fill="url(#core)" opacity="${.35+.65*(state.lit/9)}"/>`;
+  const total=9+GROUPS.length; let i=0;
+  GROUPS.forEach((g,gi)=>{const start=i;g.docs.forEach((d,di)=>{const a=(i/total)*360-90+ (gi*360/total)*0; const st=full?'aprobado':(state.over&&state.over[g.n+di])||d[1];
+      const rad=a*Math.PI/180; const x=cx+Math.cos(rad)*(r0+len/2), y=cy+Math.sin(rad)*(r0+len/2);
+      const lit=['aprobado','cargado','revision'].includes(st);
+      const fill=lit?(st==='revision'?'#91BEC6':'url(#lit)'):st==='observado'?'#FFB547':'none';
+      const stroke=lit?'none':st==='observado'?'#FFB547':'rgba(244,235,211,.45)';
+      html+=`<g transform="translate(${x} ${y}) rotate(${a+90})"><g class="petal ${lit?'':st==='observado'?'obs':'pend'} ${state.arrive===g.n+di?'arrive':''}" style="transform-origin:0 0"><rect x="-15" y="${-len/2}" width="30" height="${len}" rx="15" fill="${fill}" stroke="${stroke}" stroke-width="1.5" ${lit||st==='observado'?'':'stroke-dasharray="4 5"'}/><text x="0" y="${len/2-14}" fill="${lit||st==='observado'?'#06111D':'rgba(244,235,211,.7)'}" font-size="11" font-family="Inter" font-weight="600" text-anchor="middle" transform="rotate(-90 0 ${len/2-14})" dy="4">${d[0]}</text></g></g>`;
+      i++;});
+    const mid=((start+(g.docs.length-1)/2)/total)*360-90, mr=mid*Math.PI/180, lr=r0+len+16;
+    html+=`<text x="${Math.max(34,Math.min(356,cx+Math.cos(mr)*lr))}" y="${cy+Math.sin(mr)*lr}" fill="rgba(244,235,211,.55)" font-size="10" letter-spacing="1.5" font-family="Inter" font-weight="700" text-anchor="middle" dominant-baseline="middle">${g.n}</text>`;
+    i++; });
+  svg.innerHTML=html;
+}
+let RS={lit:6,over:{},arrive:null};
+
+/* ---------- QR decorativo ---------- */
+(function(){const q=document.getElementById('qr');let h='';let seed=7;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280};for(let y=0;y<21;y++)for(let x=0;x<21;x++){const f=(x<7&&y<7)||(x>13&&y<7)||(x<7&&y>13);let on;if(f){const lx=x>13?x-14:x,ly=y>13?y-14:y;on=lx===0||lx===6||ly===0||ly===6||(lx>1&&lx<5&&ly>1&&ly<5)}else on=rnd()>.5;h+=`<i class="${on?'':'o'}"></i>`}q.innerHTML=h})();
+(function(){const w=document.getElementById('wave');w.innerHTML=Array.from({length:34}).map(()=>'<i></i>').join('')})();
+
+/* ---------- Panel lateral por capítulo ---------- */
+let cur='ronda';
+function side(){
+  const c=CH.find(x=>x.k===cur);let sim='';
+  if(cur==='ronda') sim=`<button data-act="mom">Simular: tu mamá subió su recibo</button><button data-act="thi">Simular: Thiago subió su DNI</button>`;
+  if(cur==='visor') sim=`<button data-act="assign">Simular: confirmar "Mamá"</button><button data-act="rescan">Simular otro papel</button>`;
+  if(cur==='nivel') sim=`<label style="width:100%;border-style:dashed">Simular inclinación: <b id="tv">18°</b><input type="range" min="-30" max="30" value="18" id="tilt"></label><button data-act="gyro">Usar el giroscopio (celular real)</button>`;
+  if(cur==='mano') sim=`<button data-act="mom">Simular: tu mamá escaneó el QR y subió su recibo</button>`;
+  if(cur==='voz') sim=`<button data-act="talk">Simular voz</button>`;
+  if(cur==='charla') sim=`<button data-act="redo">Simular: respondo sacando la foto</button>`;
+  if(cur==='cierre') sim=`<button data-act="send">Simular mantener apretado</button><button data-act="reset">Volver a empezar</button>`;
+  document.getElementById('side').innerHTML=`<h2>${c.h}</h2>${c.p.map(x=>`<p>${x}</p>`).join('')}
+   <div class="blk"><h3>Simular</h3><div class="sim">${sim}</div></div>
+   <div class="blk"><h3>Qué rompe</h3><ul class="breaks">${c.b.map(x=>`<li>${x}</li>`).join('')}</ul></div>
+   <div class="blk" data-pieza="C-08 lenguaje de sonido y háptica"><h3>Sonido y háptica como lenguaje</h3><table class="score">${SCORE.map((s,i)=>`<tr><td>${s[0]}</td><td>${s[1]} · <button data-tone="${i}">escuchar</button></td></tr>`).join('')}</table></div>`;
+  const t=document.getElementById('tilt'); if(t) t.addEventListener('input',e=>tilt(+e.target.value));
+}
+function go(k){cur=k;document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.dataset.s===k));
+  document.querySelectorAll('#chapters button').forEach(b=>b.setAttribute('aria-current',b.dataset.k===k));side();
+  if(k==='nivel')tilt(18); if(k==='cierre'){ring(document.getElementById('ring2'),{lit:9},true)} if(k==='ronda')ring(document.getElementById('ring'),RS);}
+document.getElementById('chapters').innerHTML=CH.map((c,i)=>`<li><button data-k="${c.k}"><span class="k">${i+1}</span><span><b>${c.t}</b><span class="s">${c.s}</span></span></button></li>`).join('');
+document.getElementById('chapters').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.k)});
+
+/* ---------- Interacciones ---------- */
+let tiltTimer=null;
+function tilt(v){const b=document.getElementById('bub'),d=document.getElementById('deg'),c=document.getElementById('cnt'),s=document.getElementById('nvsay'),p=document.getElementById('nvpaper');if(!b)return;
+  const tv=document.getElementById('tv');if(tv)tv.textContent=v+'°';
+  b.style.transform=`translate(${v*2.4}px,${v*1.2}px)`;p.style.transform=`perspective(700px) rotateX(${v*1.1}deg) rotateZ(${v*.2}deg)`;d.textContent='INCLINACIÓN '+Math.abs(v)+'°';
+  const ok=Math.abs(v)<=3;b.classList.toggle('ok',ok);clearTimeout(tiltTimer);
+  if(ok){s.innerHTML='Quieto así…';let n=3;c.textContent=n;tiltTimer=setInterval(()=>{n--;if(n>0){c.textContent=n}else{clearInterval(tiltTimer);c.textContent='✓';document.getElementById('flash').classList.remove('go');void document.getElementById('flash').offsetWidth;document.getElementById('flash').classList.add('go');tone(SCORE[0][2]);s.innerHTML='Salió nítida.<br>La mano de Thiago, encendida.'}},500)}
+  else{c.textContent='';s.innerHTML=v>0?'Bajá un poco<br>la parte de arriba':'Levantá un poco<br>la parte de arriba'}}
+function lightMom(){RS.over['MAMÁ0']='cargado';RS.arrive='MAMÁ0';RS.lit=Math.min(9,RS.lit+1);document.getElementById('cn').textContent=RS.lit;document.getElementById('whisper').innerHTML='Se encendió <i style="color:var(--c-glow)">la mano de tu mamá</i>. Queda una foto movida y el DNI de Thiago.';go('ronda');tone(SCORE[1][2])}
+document.addEventListener('click',e=>{const tb=e.target.closest('[data-tone]');if(tb){tone(SCORE[+tb.dataset.tone][2]);return}
+  const g=e.target.closest('[data-go]');if(g){go(g.dataset.go);return}
+  const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act;
+  if(a==='mom'||a==='assign')lightMom();
+  if(a==='thi'){RS.over['THIAGO1']='cargado';RS.arrive='THIAGO1';RS.lit=Math.min(9,RS.lit+1);document.getElementById('cn').textContent=RS.lit;ring(document.getElementById('ring'),RS);tone(SCORE[1][2])}
+  if(a==='rescan'){const w=document.getElementById('whatis');w.querySelector('.q').innerHTML='Esto es una <i style="color:var(--c-warm)">boleta de luz de marzo</i>. Necesito una de los últimos 3 meses.';tone(SCORE[2][2])}
+  if(a==='gyro'){const h=ev=>tilt(Math.round(Math.max(-30,Math.min(30,ev.beta||0))));const ask=window.DeviceOrientationEvent&&DeviceOrientationEvent.requestPermission;if(ask)DeviceOrientationEvent.requestPermission().then(r=>{if(r==='granted')addEventListener('deviceorientation',h)}).catch(()=>{});else addEventListener('deviceorientation',h)}
+  if(a==='talk')talk();
+  if(a==='redo'){document.getElementById('reply').style.display='block';RS.over['VOS2']='cargado';tone(SCORE[1][2])}
+  if(a==='send')send();
+  if(a==='reset'){RS={lit:6,over:{},arrive:null};document.getElementById('cn').textContent=6;document.getElementById('cierre').classList.remove('open');document.getElementById('cw').textContent='La ronda está completa.';go('ronda')}
+});
+function talk(){const words='Hago limpieza en dos casas, los martes y los viernes. Por mes me quedan más o menos ciento ochenta mil pesos. No tengo recibo.'.split(' ');const s=document.getElementById('said'),w=[...document.querySelectorAll('#wave i')];s.innerHTML='"';let i=0;document.getElementById('dj').classList.remove('on');
+  const iv=setInterval(()=>{w.forEach(b=>b.style.height=(8+Math.random()*56)+'px');if(i<words.length){s.innerHTML+=words[i++]+' '}else{clearInterval(iv);s.innerHTML+='"';w.forEach(b=>b.style.height='10px');document.getElementById('dj').classList.add('on');tone(SCORE[1][2])}},140)}
+function send(){const arc=document.getElementById('holdarc');let p=0;const iv=setInterval(()=>{p+=.04;arc.style.strokeDashoffset=440*(1-Math.min(1,p));if(p>=1){clearInterval(iv);document.getElementById('cierre').classList.add('open');document.getElementById('cw').innerHTML='Enviada.<br><span style="font-size:20px;color:var(--c-ink-2)">Ahora la Fundación la lee con calma. Te avisamos.</span>';tone(SCORE[3][2])}},50)}
+(function(){const h=document.getElementById('hold');let iv;h.addEventListener('pointerdown',()=>{const arc=document.getElementById('holdarc');let p=0;iv=setInterval(()=>{p+=.03;arc.style.strokeDashoffset=440*(1-Math.min(1,p));if(p>=1){clearInterval(iv);send()}},50)});['pointerup','pointerleave'].forEach(ev=>h.addEventListener(ev,()=>{clearInterval(iv)}))})();
+document.getElementById('tgl').addEventListener('change',e=>{document.body.classList.toggle('piezas',e.target.checked);document.querySelectorAll('[data-pieza]').forEach(x=>{if(getComputedStyle(x).position==='static')x.style.position='relative'})});
+go('ronda');
+</script>
+</body>
+</html>

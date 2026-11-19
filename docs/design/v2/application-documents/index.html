@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P14 Documentación · Tres variantes</title>
+<style>
+@font-face{font-family:"Inter";src:url("../../common/fonts/inter-variable.woff2") format("woff2");font-weight:100 900}
+@font-face{font-family:"Montserrat";src:url("../../common/fonts/montserrat-variable.woff2") format("woff2");font-weight:100 900}
+:root{--i-bg:#F7F7F7;--i-surface:#FFFFFF;--i-title:#203758;--i-text:#1C1C1C;--i-text-2:#5F6B73;--i-accent:#207766;--i-border:#DDE1E4;--i-sp:8px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--i-bg);color:var(--i-text);padding:calc(var(--i-sp)*6) calc(var(--i-sp)*4)}
+header{max-width:1280px;margin:0 auto calc(var(--i-sp)*4);display:flex;gap:calc(var(--i-sp)*2);align-items:center}
+header img{width:56px;height:56px;border-radius:50%}
+h1{font-family:Montserrat,sans-serif;font-size:28px;color:var(--i-title)}
+header p{color:var(--i-text-2);font-size:16px;margin-top:4px}
+.grid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:calc(var(--i-sp)*3)}
+a.card{display:grid;grid-template-rows:auto 1fr;text-decoration:none;color:inherit;background:var(--i-surface);border:1px solid var(--i-border);border-radius:12px;overflow:hidden;transition:transform .2s}
+a.card:hover{transform:translateY(-2px)}
+a.card:focus-visible{outline:3px solid #3E9080;outline-offset:3px}
+.thumb{aspect-ratio:16/10;background:#E6EAEA;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;object-position:left top;display:block}
+.body{padding:calc(var(--i-sp)*2.5) calc(var(--i-sp)*3) calc(var(--i-sp)*3);display:grid;gap:var(--i-sp)}
+.tag{font-size:14px;font-weight:600;color:var(--i-accent)}
+h2{font-family:Montserrat,sans-serif;font-size:20px;color:var(--i-title)}
+.body p{font-size:15px;line-height:1.5;color:var(--i-text-2)}
+.foot{max-width:1280px;margin:calc(var(--i-sp)*4) auto 0;font-size:14px;color:var(--i-text-2)}
+.foot a{color:var(--i-accent)}
+</style>
+</head>
+<body>
+<header><img src="../../common/brand/logo-provisional.png" alt="Fundación San Lucas"><div><h1>P14 · Documentación de la postulación</h1><p>Tres direcciones de arte para elegir piezas. Cada variante tiene selector de estados y un interruptor para ver los rótulos de piezas.</p></div></header>
+<main class="grid">
+  <a class="card" href="variante-a-clasica.html"><div class="thumb"><img src="variante-a.png" alt="Miniatura de la variante A"></div><div class="body"><span class="tag">A · Clásica de productividad</span><h2>Tablero de documentos</h2><p>Una lista de control agrupada por persona, con filtros, tabla e inspector en la computadora y una sola acción fija abajo en el celular: siempre sabés qué sigue.</p></div></a>
+  <a class="card" href="variante-b-premium.html"><div class="thumb"><img src="variante-b.png" alt="Miniatura de la variante B"></div><div class="body"><span class="tag">B · Premium estilo Apple</span><h2>Una cosa por vez</h2><p>Un número grande, una sola tarjeta con lo próximo y un escáner que endereza solo. Hojas con detents, materiales solo en la navegación y mucho aire.</p></div></a>
+  <a class="card" href="variante-c-disruptiva.html"><div class="thumb"><img src="variante-c.png" alt="Miniatura de la variante C"></div><div class="body"><span class="tag">C · Disruptiva</span><h2>La ronda</h2><p>Los papeles no se cargan: se juntan en ronda. Un círculo de manos que se enciende, la cámara que reconoce cualquier papel, la familia que aporta desde su celular y la voz en lugar de la declaración jurada.</p></div></a>
+</main>
+<p class="foot">Fundamentos, tokens, inventario de piezas y recomendación: <a href="direccion-de-arte.md">direccion-de-arte.md</a></p>
+</body>
+</html>
