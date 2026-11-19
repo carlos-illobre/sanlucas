@@ -1,5 +1,22 @@
 # Sistema de Gestión de Becas – Fundación Pastoral Universitaria San Lucas
 
+## Maquetas
+
+**[Abrir el visor de maquetas](https://carlos-illobre.github.io/sanlucas/docs/design/)** (celular y computadora)
+
+### P14 · Documentación de la postulación
+
+**Versión 1: director de arte con skill** (se navega en el visor)
+- [1 · Lista clara](https://carlos-illobre.github.io/sanlucas/docs/design/#screen=application-documents&variant=0&device=phone)
+- [2 · De a uno](https://carlos-illobre.github.io/sanlucas/docs/design/#screen=application-documents&variant=1&device=phone)
+- [3 · La mesa (audaz)](https://carlos-illobre.github.io/sanlucas/docs/design/#screen=application-documents&variant=2&device=phone)
+
+**Versión 2: prompt directo** (abre cada variante por separado)
+- [A · Tablero de documentos](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-a-clasica.html), celular y computadora
+- [B · Una cosa por vez](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-b-premium.html), celular y computadora
+- [C · La ronda](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-c-disruptiva.html), solo celular
+- [Comparativa de las tres](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/)
+
 Solución para gestionar el ciclo completo de becas universitarias de la Fundación Pastoral Universitaria San Lucas: desde la apertura de una convocatoria hasta el dictamen final, para todas las universidades con las que trabaja la Fundación.
 
 Proyecto desarrollado en el marco de la competencia (estilo hackathon) organizada por la Facultad de Ingeniería de UADE junto con la Fundación.
@@ -20,15 +37,6 @@ Proyecto desarrollado en el marco de la competencia (estilo hackathon) organizad
 - [Plan de acción](docs/plan-de-accion.md): cronograma, roles, entregables y estrategia para la competencia.
 - [Perfil de la Fundación](docs/perfil-fundacion.md): misión, valores, marca, voz y lineamientos de interfaz.
 - [Lenguaje visual](docs/design/visual-language.md): colores, tipografía, íconos y reglas de la interfaz.
-
-## Maquetas
-
-Se ven funcionando en el [visor de maquetas](https://carlos-illobre.github.io/sanlucas/docs/design/) (celular y computadora).
-
-| Pantalla | Versión | Enlace |
-|---|---|---|
-| P14 · Documentación | Director de arte (skill): 1 · Lista clara, 2 · De a uno, 3 · La mesa | [Abrir en el visor](https://carlos-illobre.github.io/sanlucas/docs/design/#screen=application-documents&variant=0&device=phone) |
-| P14 · Documentación | Prompt directo (v2): A · Tablero, B · Una cosa por vez, C · La ronda (solo celular) | [A](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-a-clasica.html) · [B](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-b-premium.html) · [C](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-c-disruptiva.html) · [Comparativa](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/) |
 
 ## Fechas clave (tentativas)
 
