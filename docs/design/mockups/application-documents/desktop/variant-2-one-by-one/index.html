@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P14 Documentación · Variante 2 · De a uno (computadora)</title>
+<link rel="stylesheet" href="../../../../common/common.css">
+<style>
+  [hidden] { display: none !important; }
+  body { min-height: 100vh; display: flex; flex-direction: column; }
+  .barra { display: flex; align-items: center; gap: var(--sl-e4); height: 64px; padding: 0 var(--sl-e8); background: var(--sl-superficie); box-shadow: var(--sl-sombra-1); }
+  .barra img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+  .marca { font: 700 var(--sl-t-h3)/1.1 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .marca small { display: block; font: 500 var(--sl-t-chico)/1.2 var(--sl-font-texto); color: var(--sl-gris); }
+  .barra .paso { margin-left: var(--sl-e8); display: flex; align-items: center; gap: var(--sl-e2); font-size: 14px; color: var(--sl-gris); }
+  .barra .paso a { color: var(--sl-gris); text-decoration: none; display: inline-flex; align-items: center; }
+  .barra .paso b { color: var(--sl-azul-noche); }
+  .barra nav { margin-left: auto; display: flex; gap: var(--sl-e2); }
+  .barra nav a { padding: var(--sl-e2) var(--sl-e4); border-radius: var(--sl-radio-chico); color: var(--sl-gris); text-decoration: none; font-weight: 600; }
+  .barra nav a[aria-current] { color: var(--sl-verde); background: var(--sl-bruma); }
+
+  .app { flex: 1; display: grid; grid-template-columns: 268px minmax(0, 1fr) 300px; gap: var(--sl-e6); padding: var(--sl-e5) var(--sl-e8) var(--sl-e6); max-width: 1366px; width: 100%; margin: 0 auto; }
+  .titulo-fila { grid-column: 1 / -1; display: flex; align-items: center; gap: var(--sl-e6); }
+  .titulo-fila .n { display: flex; align-items: baseline; gap: var(--sl-e2); white-space: nowrap; }
+  .titulo-fila .n b { font: 700 32px/1 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .titulo-fila .n span { color: var(--sl-gris); }
+  .tira { flex: 1; display: flex; gap: var(--sl-e2); }
+  .slot { position: relative; flex: 1; height: 56px; border-radius: 8px; border: 0; padding: 0; cursor: pointer; display: grid; place-items: center; background: #fff; box-shadow: inset 0 0 0 1px var(--sl-borde); overflow: hidden; transition: transform var(--sl-dur) var(--sl-curva); }
+  .slot svg.sld-art { width: 70%; }
+  .slot.vacio { background: transparent; box-shadow: inset 0 0 0 1.5px #C9D1D6; background-image: repeating-linear-gradient(135deg, transparent 0 6px, rgba(201,209,214,.25) 6px 7px); }
+  .slot.aca { box-shadow: inset 0 0 0 2px var(--sl-verde); transform: translateY(-3px); background: var(--sl-bruma); }
+  .slot:hover { transform: translateY(-2px); }
+  .slot .b { position: absolute; right: 3px; top: 3px; width: 18px; height: 18px; border-radius: 50%; display: grid; place-items: center; color: #fff; background: var(--sl-verde); }
+  .slot .b.esp { background: var(--sl-azul); } .slot .b.obs { background: var(--sl-alerta); }
+  .slot .b svg { width: 12px; height: 12px; stroke-width: 3; }
+  .slot.cae { animation: cae 520ms var(--sl-curva); }
+  @keyframes cae { 0% { transform: translateY(-24px) scale(1.3); opacity: .2; } 100% { transform: none; opacity: 1; } }
+  .cierra { white-space: nowrap; font-size: 14px; color: var(--sl-gris); display: inline-flex; gap: 6px; align-items: center; }
+
+  .col h2 { font-size: 17px; margin-bottom: var(--sl-e3); display: flex; align-items: center; gap: var(--sl-e2); }
+  .col h2 small { margin-left: auto; font: 600 14px/1 var(--sl-font-texto); color: var(--sl-gris); }
+  .fila { display: grid; gap: var(--sl-e2); }
+  .en-fila { display: grid; grid-template-columns: 28px 1fr; gap: var(--sl-e3); align-items: center; width: 100%; padding: var(--sl-e3); border: 0; border-radius: var(--sl-radio); background: #fff; box-shadow: var(--sl-sombra-1); text-align: left; font: inherit; cursor: pointer; transition: transform var(--sl-dur) var(--sl-curva), opacity var(--sl-dur); }
+  .en-fila:hover { transform: translateX(3px); }
+  .en-fila.actual { box-shadow: inset 0 0 0 2px var(--sl-verde), var(--sl-sombra-1); }
+  .en-fila .num { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 700 14px/1 var(--sl-font-titulos); background: var(--sl-bruma); color: var(--sl-verde); }
+  .en-fila.actual .num { background: var(--sl-verde); color: #fff; }
+  .en-fila.obs .num { background: var(--sl-alerta-fondo); color: var(--sl-alerta); }
+  .en-fila b { display: block; font-size: 15px; font-weight: 600; line-height: 1.3; }
+  .en-fila span { font-size: 14px; color: var(--sl-gris); }
+  .teclas { margin-top: var(--sl-e4); font-size: 14px; color: var(--sl-gris); display: grid; gap: var(--sl-e2); }
+  .teclas div { display: flex; align-items: center; gap: 6px; }
+
+  /* Escenario */
+  .escenario { position: relative; min-height: 520px; }
+  .carta { position: absolute; inset: 0; background: #fff; border-radius: 24px; box-shadow: var(--sl-sombra-2); display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; transition: transform var(--sl-dur-lenta) var(--sl-curva), opacity var(--sl-dur-lenta); }
+  .carta.atras1 { transform: translateY(-14px) scale(.96); opacity: .6; }
+  .carta.sale { transform: translateX(-60%) rotate(-5deg); opacity: 0; }
+  .carta.vuela { transform: translateY(-80%) scale(.15); opacity: 0; }
+  .ilus { position: relative; background: var(--sl-bruma); display: grid; place-items: center; overflow: hidden; transition: background var(--sl-dur); }
+  .ilus .sl-forma { right: -140px; bottom: -160px; opacity: .1; }
+  .ilus .papel { width: 52%; transform: rotate(-3deg); filter: drop-shadow(0 12px 18px rgba(32,55,88,.18)); animation: flota 4s ease-in-out infinite; }
+  .ilus .papel.dni { width: 80%; }
+  .ilus .papel svg { display: block; width: 100%; }
+  @keyframes flota { 0%, 100% { transform: rotate(-3deg) translateY(0); } 50% { transform: rotate(-2deg) translateY(-6px); } }
+  .carta.encima .ilus { background: #DDEFEA; }
+  .ilus .soltar { position: absolute; inset: var(--sl-e4); border: 2px dashed rgba(32,119,102,.35); border-radius: 18px; display: flex; align-items: flex-end; justify-content: center; padding-bottom: var(--sl-e4); font-size: 14px; font-weight: 600; color: var(--sl-verde); pointer-events: none; }
+  .lado { padding: var(--sl-e8) var(--sl-e6) var(--sl-e6); display: flex; flex-direction: column; gap: var(--sl-e4); }
+  .quien { display: flex; align-items: center; gap: var(--sl-e2); font-size: 14px; color: var(--sl-gris); font-weight: 600; }
+  .avatar { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font: 700 14px/1 var(--sl-font-titulos); color: var(--t); background: #fff; box-shadow: 0 0 0 1.5px var(--t), 0 0 0 4px #fff, 0 0 0 5px color-mix(in srgb, var(--t) 30%, transparent); flex: none; }
+  .lado h1 { font-size: 28px; }
+  .lado p { color: var(--sl-gris); }
+  .obs-banda { padding: var(--sl-e3); border-radius: 10px; background: var(--sl-alerta-fondo); color: #6E4700; font-size: 14px; display: flex; gap: var(--sl-e2); }
+  .obs-banda i { color: var(--sl-alerta); }
+  .lado .acc { margin-top: auto; display: grid; gap: var(--sl-e3); }
+  .lado .acc .sl-btn { justify-content: flex-start; }
+  .lado .acc .sl-btn .sl-tecla { margin-left: auto; }
+  .lado .acc .sl-btn-primario { min-height: 56px; }
+  .sl-btn-primario .sl-tecla { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); color: #fff; }
+  .analisis { display: grid; gap: var(--sl-e3); }
+  .analisis .f { display: flex; gap: var(--sl-e3); align-items: center; opacity: 0; transform: translateY(6px); animation: ap var(--sl-dur) var(--sl-curva) forwards; }
+  .analisis .f:nth-child(2) { animation-delay: .3s; } .analisis .f:nth-child(3) { animation-delay: .6s; } .analisis .f:nth-child(4) { animation-delay: .9s; }
+  @keyframes ap { to { opacity: 1; transform: none; } }
+  .analisis .f i { color: var(--sl-exito); }
+  .fin { position: absolute; inset: 0; background: #fff; border-radius: 24px; box-shadow: var(--sl-sombra-2); display: grid; place-content: center; justify-items: center; gap: var(--sl-e4); text-align: center; padding: var(--sl-e10); }
+  .fin img { width: 120px; height: 120px; border-radius: 50%; box-shadow: 0 0 0 8px #fff, 0 0 0 9px var(--sl-celeste); animation: abre 700ms cubic-bezier(.2,1.6,.4,1); }
+  @keyframes abre { from { transform: scale(.5) rotate(-20deg); opacity: 0; } to { transform: none; opacity: 1; } }
+  .fin p { color: var(--sl-gris); max-width: 420px; }
+
+  /* Derecha */
+  .tarjeta { background: #fff; border-radius: var(--sl-radio); box-shadow: var(--sl-sombra-1); padding: var(--sl-e4); }
+  .tarjeta + .tarjeta { margin-top: var(--sl-e4); }
+  .qr { display: grid; grid-template-columns: 88px 1fr; gap: var(--sl-e3); align-items: center; }
+  .qr svg { width: 88px; height: 88px; }
+  .qr p { font-size: 14px; color: var(--sl-gris); }
+  .conectado { display: flex; align-items: center; gap: var(--sl-e2); margin-top: var(--sl-e3); padding: var(--sl-e2) var(--sl-e3); border-radius: 10px; background: var(--sl-fondo); font-size: 14px; color: var(--sl-gris); }
+  .conectado .p { width: 10px; height: 10px; border-radius: 50%; background: #C9D1D6; }
+  .conectado.si { background: var(--sl-exito-fondo); color: var(--sl-exito); font-weight: 600; }
+  .conectado.si .p { background: var(--sl-exito); box-shadow: 0 0 0 4px rgba(30,123,79,.18); }
+  .pedido { display: grid; grid-template-columns: 32px 1fr; gap: var(--sl-e3); align-items: center; padding: var(--sl-e2) 0; }
+  .pedido + .pedido { border-top: 1px solid var(--sl-borde); }
+  .pedido b { font-size: 15px; display: block; }
+  .pedido span { font-size: 14px; color: var(--sl-gris); }
+  .vacio-p { font-size: 14px; color: var(--sl-gris); }
+
+  .modal { position: fixed; left: 50%; top: 50%; width: 480px; transform: translate(-50%, -46%); opacity: 0; pointer-events: none; z-index: 901; background: #fff; border-radius: var(--sl-radio-grande); box-shadow: var(--sl-sombra-3); padding: var(--sl-e6); transition: transform var(--sl-dur) var(--sl-curva), opacity var(--sl-dur); }
+  .modal.abierta { opacity: 1; transform: translate(-50%, -50%); pointer-events: auto; }
+  .modal .cab { display: flex; align-items: center; gap: var(--sl-e3); margin-bottom: var(--sl-e4); }
+  .modal .cab h2 { flex: 1; }
+  .icono-btn { width: 40px; height: 40px; display: grid; place-items: center; border: 0; background: transparent; color: var(--sl-azul-noche); border-radius: var(--sl-radio); cursor: pointer; }
+  .msj { background: #E9F5EF; border-radius: 16px 16px 4px 16px; padding: var(--sl-e3) var(--sl-e4); margin: 0 0 var(--sl-e3) var(--sl-e10); }
+  .msj u { color: var(--sl-azul); text-decoration: none; font-weight: 600; }
+  .nota { font-size: 14px; color: var(--sl-gris); display: flex; gap: var(--sl-e2); margin-bottom: var(--sl-e4); }
+  .modal .bots { display: flex; gap: var(--sl-e3); justify-content: flex-end; }
+  .vista { background: #F2F4F5; border-radius: 16px; display: grid; place-items: center; padding: var(--sl-e6); margin-bottom: var(--sl-e4); }
+  .vista div { width: 150px; background: #fff; border-radius: 4px; box-shadow: var(--sl-sombra-2); } .vista div.dni { width: 260px; background: transparent; box-shadow: none; }
+  .vista svg { display: block; width: 100%; }
+</style>
+</head>
+<body>
+  <header class="barra">
+    <img src="../../../../common/brand/logo-provisional.png" alt="Fundación San Lucas">
+    <div class="marca">Fundación San Lucas<small>Becas universitarias</small></div>
+    <div class="paso"><a href="#" data-ir="academic-data"><i data-icon="chevron-left" data-size="20"></i>Estudios</a> · <b>Paso 5 de 6: Documentación</b> · <a href="#" data-ir="application-review">Revisión</a></div>
+    <nav aria-label="Navegación principal">
+      <a href="#" data-ir="home">Inicio</a>
+      <a href="#" aria-current="page" data-ir="application-status">Mi postulación</a>
+      <a href="#" data-ir="profile">Perfil</a>
+    </nav>
+  </header>
+
+  <div class="app">
+    <div class="titulo-fila">
+      <div class="n"><b id="nListos">5 de 9</b><span>listos</span></div>
+      <div class="tira" id="tira"></div>
+      <span class="cierra"><i data-icon="calendar" data-size="16"></i>Cierra el 12/12</span>
+    </div>
+
+    <aside class="col">
+      <h2>Lo que sigue <small id="nFila">6</small></h2>
+      <div class="fila" id="fila"></div>
+      <div class="teclas">
+        <div><span class="sl-tecla">Enter</span> Subir archivo</div>
+        <div><span class="sl-tecla">P</span> Pedírselo a quien lo tiene</div>
+        <div><span class="sl-tecla">→</span> Más tarde · <span class="sl-tecla">←</span> Volver</div>
+      </div>
+    </aside>
+
+    <main class="escenario" id="escenario"></main>
+
+    <aside class="col">
+      <h2><i data-icon="smartphone" data-size="20"></i>Tu celular como escáner</h2>
+      <div class="tarjeta">
+        <div class="qr" id="qr"></div>
+        <div class="conectado" id="conectado"><span class="p"></span><span id="conTx">Esperando el celular…</span></div>
+      </div>
+      <h2 style="margin-top:var(--sl-e6)"><i data-icon="users" data-size="20"></i>Pedidos a tu familia</h2>
+      <div class="tarjeta" id="pedidos"><p class="vacio-p">Si un papel lo tiene otra persona, pedíselo con <span class="sl-tecla">P</span>: le llega un enlace para sacarle foto.</p></div>
+    </aside>
+  </div>
+
+  <div class="sl-velo" id="velo"></div>
+  <section class="modal" id="modal" role="dialog" aria-modal="true"></section>
+
+  <script src="../../../../common/icons.js"></script>
+  <script src="../../shared/documents.js"></script>
+  <script src="../../../../common/navigate.js" defer></script>
+  <script>
+  (function () {
+    var D = SLD, $ = function (s) { return document.querySelector(s); };
+    var esperando = {}, pedidos = [];
+    var QUE = { ddjj: 'La declaración jurada de ingresos informales, firmada por Mirta. Si no la tiene, la descargás de acá, la imprime y la firma.', recibo: 'El último recibo que cobró Lautaro, en papel o el PDF que le manda la empresa.', dni: 'Frente y dorso, en una foto cada uno o en un PDF con las dos caras.', analitico: 'Subí una foto nueva o el PDF que te dio la escuela. Reemplaza al anterior.', carta: 'Opcional. Una página donde nos contás por qué Informática.', cert: 'Opcional. Solo si tenés el Certificado Único de Discapacidad.' };
+    function armarFila() { return D.docs.filter(function (d) { return (d.state === 'observado' || d.state === 'pendiente') && !esperando[d.id]; }).sort(function (a, b) { return (b.state === 'observado') - (a.state === 'observado') || (b.req - a.req); }); }
+    var cola = armarFila(), i = 0;
+
+    function qr() {
+      var s = '<svg viewBox="0 0 25 25" shape-rendering="crispEdges" aria-hidden="true"><rect width="25" height="25" fill="#fff"/>', seed = 11;
+      function box(x, y) { s += '<rect x="' + x + '" y="' + y + '" width="7" height="7" fill="#203758"/><rect x="' + (x + 1) + '" y="' + (y + 1) + '" width="5" height="5" fill="#fff"/><rect x="' + (x + 2) + '" y="' + (y + 2) + '" width="3" height="3" fill="#203758"/>'; }
+      for (var y = 0; y < 25; y++) for (var x = 0; x < 25; x++) { seed = (seed * 9301 + 49297) % 233280; if ((x < 8 && y < 8) || (x > 16 && y < 8) || (x < 8 && y > 16)) continue; if (seed / 233280 > .52) s += '<rect x="' + x + '" y="' + y + '" width="1" height="1" fill="#203758"/>'; }
+      box(0, 0); box(18, 0); box(0, 18); return s + '</svg>';
+    }
+    $('#qr').innerHTML = qr() + '<p>Escaneá este código una vez. Después, cada foto que saques en el celular cae en el documento que tenés abierto acá.</p>';
+    $('#conectado').addEventListener('click', function () {});
+
+    function pintarTira() {
+      var act = cola[i];
+      $('#tira').innerHTML = D.docs.filter(function (d) { return d.req; }).map(function (d) {
+        var b = esperando[d.id] ? '<span class="b esp">' + slIcon('clock', 12) + '</span>' : d.state === 'observado' ? '<span class="b obs">' + slIcon('triangle-alert', 12) + '</span>' : D.isReady(d) ? '<span class="b">' + slIcon('check', 12) + '</span>' : '';
+        var v = d.state === 'pendiente';
+        return '<button class="slot' + (v ? ' vacio' : '') + (act && act.id === d.id ? ' aca' : '') + '" data-slot="' + d.id + '" title="' + d.title + '" aria-label="' + d.title + ': ' + D.STATES[d.state].label + '">' + (v ? '' : D.art(d.kind, { blur: d.state === 'observado' ? 1.4 : 0 })) + b + '</button>';
+      }).join('');
+      var c = D.counts(); $('#nListos').textContent = c.ready + ' de ' + c.total;
+      $('#nFila').textContent = cola.length - i;
+      $('#fila').innerHTML = cola.slice(i).map(function (d, k) {
+        var p = D.person(d.who);
+        return '<button class="en-fila' + (k === 0 ? ' actual' : '') + (d.state === 'observado' ? ' obs' : '') + '" data-ir-a="' + d.id + '"><span class="num">' + (d.state === 'observado' ? slIcon('triangle-alert', 14) : k + 1) + '</span><span><b>' + d.title + '</b><span>' + (p.id === 'yo' ? 'Tuyo' : p.id === 'hogar' ? 'Del hogar' : p.name) + (d.req ? '' : ' · opcional') + '</span></span></button>';
+      }).join('');
+    }
+    function carta(d, cls) {
+      var p = D.person(d.who), puedePedir = p.id !== 'yo' && p.id !== 'hogar';
+      return '<article class="carta ' + cls + '"><div class="ilus"><div class="sl-forma"></div><div class="papel' + (d.kind === 'dni' ? ' dni' : '') + '">' + D.art(d.kind, { blur: d.state === 'observado' ? 1.6 : 0 }) + '</div><div class="soltar">Soltá el archivo acá</div></div>' +
+        '<div class="lado"><div class="quien"><span class="avatar" style="--t:' + p.tint + '">' + (p.ini || slIcon(p.icon, 16)) + '</span>' + (p.id === 'yo' ? 'Tuyo' : p.id === 'hogar' ? 'De tu hogar' : 'De ' + p.full + ' · ' + p.rel) + '</div>' +
+        (d.state === 'observado' ? '<div class="obs-banda"><i data-icon="triangle-alert" data-size="20"></i><span>' + d.reason + '</span></div>' : '') +
+        '<h1>' + d.title + '</h1><p>' + (QUE[d.kind] || d.detail) + '</p>' +
+        '<div class="acc" id="acc"><button class="sl-btn sl-btn-primario" data-subir><i data-icon="upload" data-size="20"></i>' + (d.state === 'observado' ? 'Subir uno nuevo' : 'Subir archivo') + '<span class="sl-tecla">Enter</span></button>' +
+        (puedePedir ? '<button class="sl-btn sl-btn-secundario" data-pedir><i data-icon="message-circle" data-size="20"></i>Pedírselo a ' + p.name + '<span class="sl-tecla">P</span></button>' : '') +
+        '<button class="sl-btn sl-btn-secundario" data-despues><i data-icon="clock" data-size="20"></i>Más tarde<span class="sl-tecla">→</span></button></div></div></article>';
+    }
+    function pintar() {
+      var d = cola[i];
+      if (!d) {
+        var c = D.counts(), todo = c.ready === c.total;
+        $('#escenario').innerHTML = '<div class="fin"><img src="../../../../common/brand/logo-provisional.png" alt=""><h1>' + (todo ? '¡Están todos, Camila!' : 'Por ahora, esto es todo') + '</h1><p>' + (todo ? 'Cargaste los 9 obligatorios. Revisá y enviá tu postulación.' : 'Cuando tu familia suba lo que les pediste, aparece acá solo. Lo demás lo podés cargar cuando quieras.') + '</p><button class="sl-btn sl-btn-primario" data-ir="application-review"' + (todo ? '' : ' disabled') + '>Revisar y enviar ' + slIcon('arrow-right', 20) + '</button></div>';
+        pintarTira(); return;
+      }
+      $('#escenario').innerHTML = (cola[i + 1] ? carta(cola[i + 1], 'atras1') : '') + carta(d, 'frente');
+      slRenderIcons($('#escenario')); pintarTira();
+      var c2 = $('.carta.frente');
+      ['dragenter', 'dragover'].forEach(function (ev) { c2.addEventListener(ev, function (e) { e.preventDefault(); c2.classList.add('encima'); }); });
+      c2.addEventListener('dragleave', function () { c2.classList.remove('encima'); });
+      c2.addEventListener('drop', function (e) { e.preventDefault(); c2.classList.remove('encima'); subir(); });
+    }
+    function avanzar(como) {
+      var c = $('.carta.frente'); if (!c) return; c.classList.add(como);
+      var a = $('.carta.atras1'); if (a) a.classList.remove('atras1');
+      setTimeout(function () { i++; pintar(); }, D.reduce ? 10 : 420);
+    }
+    function despues() { if (!cola[i]) return; var d = cola.splice(i, 1)[0]; cola.push(d); i--; avanzar('sale'); }
+    function atras() { if (i > 0) { i--; pintar(); } }
+    function subir() {
+      var d = cola[i]; if (!d) return;
+      var acc = $('#acc'); if (!acc) return;
+      acc.removeAttribute('id');
+      acc.innerHTML = '<div class="analisis"><div class="f"><i data-icon="file-check"></i>' + (d.kind === 'recibo' ? 'recibo-octubre.pdf' : d.id + '.jpg') + ' · 3,8 MB</div><div class="f"><i data-icon="circle-check"></i>Se lee bien y está entero</div><div class="f"><i data-icon="crop"></i>Recortado y achicado a 210 KB</div><div class="f"><i data-icon="cloud-upload"></i>Subiendo…</div></div>';
+      slRenderIcons(acc);
+      setTimeout(function () {
+        d.state = 'cargado'; d.when = '19/11'; avanzar('vuela');
+        setTimeout(function () { var s = document.querySelector('[data-slot="' + d.id + '"]'); if (s) s.classList.add('cae'); var c = D.counts(); D.toast(c.ready === c.total ? '¡Están todos!' : '¡Listo! ' + (c.total - c.ready === 1 ? 'Te queda 1.' : 'Te quedan ' + (c.total - c.ready) + '.'), 'circle-check'); }, 460);
+      }, 1700);
+    }
+    function abrir(h) { $('#modal').innerHTML = h; slRenderIcons($('#modal')); $('#velo').classList.add('abierto'); $('#modal').classList.add('abierta'); }
+    function cerrar() { $('#velo').classList.remove('abierto'); $('#modal').classList.remove('abierta'); }
+    function pedir() {
+      var d = cola[i]; if (!d) return; var p = D.person(d.who); if (!p.ini || p.id === 'yo') return;
+      abrir('<div class="cab"><span class="avatar" style="--t:' + p.tint + '">' + p.ini + '</span><h2>Pedíselo a ' + p.name + '</h2><button class="icono-btn" data-cerrar aria-label="Cerrar">' + slIcon('x', 20) + '</button></div>' +
+        '<div class="msj">Hola' + (p.id === 'mirta' ? ' ma' : ' ' + p.name) + ', para mi beca necesito ' + (d.kind === 'dni' ? 'una foto de tu DNI' : d.kind === 'recibo' ? 'tu último recibo de sueldo' : 'tu declaración jurada de ingresos') + '. Sacale foto desde acá: <u>becas.sanlucas.org.ar/d/7KQ2</u></div>' +
+        '<p class="nota"><i data-icon="shield-check" data-size="20" style="color:var(--sl-verde)"></i><span>El enlace sirve solo para este documento y vence en 7 días. ' + p.name + ' no ve el resto de tu postulación.</span></p>' +
+        '<div class="bots"><button class="sl-btn sl-btn-secundario" data-copiar>Copiar enlace</button><button class="sl-btn sl-btn-primario" data-mandar><i data-icon="message-circle" data-size="20"></i>Mandar por WhatsApp</button></div>');
+    }
+    function mandar() {
+      var d = cola[i], p = D.person(d.who); esperando[d.id] = true; pedidos.push({ d: d, p: p }); cerrar();
+      $('#pedidos').innerHTML = pedidos.map(function (x) { return '<div class="pedido"><span class="avatar" style="--t:' + x.p.tint + '">' + x.p.ini + '</span><div><b>' + x.d.title + '</b><span>Enviado hoy 19/11 · todavía no lo abrió</span></div></div>'; }).join('');
+      cola.splice(i, 1); i--; avanzar('sale'); D.toast('Se lo mandaste a ' + p.name + '. Te avisamos cuando lo suba.', 'message-circle');
+    }
+    function detalle(id) {
+      var d = D.doc(id);
+      if (d.state === 'pendiente' || d.state === 'observado') { var k = cola.indexOf(d); if (k >= 0) cola.splice(k, 1); delete esperando[d.id]; cola.splice(i, 0, d); return pintar(); }
+      abrir('<div class="cab"><h2>' + d.title + '</h2>' + D.chip(d.state) + '<button class="icono-btn" data-cerrar aria-label="Cerrar">' + slIcon('x', 20) + '</button></div><div class="vista"><div class="' + (d.kind === 'dni' ? 'dni' : '') + '">' + D.art(d.kind) + '</div></div>' +
+        '<p class="sl-chico" style="margin-bottom:var(--sl-e4)">Cargado el ' + d.when + (d.state === 'aprobado' ? ' · La Fundación lo aprobó.' : d.state === 'revision' ? ' · La Fundación lo está mirando.' : ' · Todavía no lo revisaron.') + '</p>' +
+        '<div class="bots"><button class="sl-btn sl-btn-texto" style="color:var(--sl-error)" data-borrar="' + d.id + '"><i data-icon="trash-2" data-size="20"></i>Borrar</button><button class="sl-btn sl-btn-secundario" data-reemplazar="' + d.id + '"><i data-icon="refresh-cw" data-size="20"></i>Reemplazar</button></div>');
+    }
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('button'); if (!t || t.hasAttribute('data-ir')) return;
+      if (t.hasAttribute('data-subir')) return subir();
+      if (t.hasAttribute('data-pedir')) return pedir();
+      if (t.hasAttribute('data-despues')) return despues();
+      if (t.hasAttribute('data-cerrar')) return cerrar();
+      if (t.hasAttribute('data-mandar')) return mandar();
+      if (t.hasAttribute('data-copiar')) { D.toast('Enlace copiado.', 'check'); return; }
+      if (t.dataset.slot) return detalle(t.dataset.slot);
+      if (t.dataset.irA) { var d = D.doc(t.dataset.irA), k = cola.indexOf(d); cola.splice(k, 1); cola.splice(i, 0, d); return pintar(); }
+      if (t.dataset.reemplazar) { cerrar(); var r = D.doc(t.dataset.reemplazar); r.state = 'pendiente'; return detalle(r.id); }
+      if (t.dataset.borrar) { D.doc(t.dataset.borrar).state = 'pendiente'; cerrar(); cola = armarFila(); i = 0; pintar(); return D.toast('Lo borramos. Volvió a la fila.', 'trash-2'); }
+    });
+    $('#velo').addEventListener('click', cerrar);
+    document.addEventListener('keydown', function (e) {
+      if ($('#modal').classList.contains('abierta')) { if (e.key === 'Escape') cerrar(); if (e.key === 'Enter' && $('[data-mandar]')) mandar(); return; }
+      if (e.key === 'Enter' && !e.target.closest('button')) { e.preventDefault(); subir(); }
+      else if (e.key === 'p' || e.key === 'P') pedir();
+      else if (e.key === 'ArrowRight') despues();
+      else if (e.key === 'ArrowLeft') atras();
+    });
+    setTimeout(function () { $('#conectado').classList.add('si'); $('#conTx').textContent = 'Celular conectado: Moto G24'; }, 2500);
+    pintar();
+  })();
+  </script>
+</body>
+</html>

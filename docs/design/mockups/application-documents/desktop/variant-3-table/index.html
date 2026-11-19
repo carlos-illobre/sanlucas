@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>P14 Documentación · Variante 3 · La mesa (computadora)</title>
+<link rel="stylesheet" href="../../../../common/common.css">
+<style>
+  /* ROMPE: sin marco de la app ni menú; la pantalla entera es una mesa donde se sueltan los papeles. */
+  [hidden] { display: none !important; }
+  html, body { height: 100%; }
+  body { min-height: 768px; overflow: hidden; position: relative; color: #fff; background: #2a1f18 url(../../shared/table-wood.jpg) center/cover; }
+  body::before { content: ""; position: fixed; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(14,22,32,.05), rgba(14,22,32,.6)); pointer-events: none; }
+  .arriba { position: relative; z-index: 3; display: flex; align-items: center; gap: var(--sl-e4); padding: var(--sl-e5) var(--sl-e8); }
+  .arriba img { width: 44px; height: 44px; border-radius: 50%; background: #fff; }
+  .arriba .t b { display: block; font: 700 20px/1.2 var(--sl-font-titulos); }
+  .arriba .t span { font-size: 14px; opacity: .8; }
+  .arriba .esp { flex: 1; }
+  .cuenta { display: flex; align-items: center; gap: var(--sl-e3); padding: 6px var(--sl-e4) 6px 6px; border-radius: 999px; background: rgba(14,22,32,.55); backdrop-filter: blur(8px); }
+  .cuenta svg { width: 44px; height: 44px; transform: rotate(-90deg); }
+  .cuenta circle { fill: none; stroke-width: 5; }
+  .cuenta .f { stroke: rgba(255,255,255,.2); } .cuenta .v { stroke: #6FE0C4; stroke-linecap: round; transition: stroke-dashoffset var(--sl-dur-lenta) var(--sl-curva); }
+  .cuenta b { font: 700 20px/1 var(--sl-font-titulos); }
+  .cuenta span { font-size: 14px; opacity: .8; }
+  .redondo { width: 48px; height: 48px; border-radius: 50%; border: 0; display: grid; place-items: center; background: rgba(14,22,32,.55); color: #fff; cursor: pointer; backdrop-filter: blur(8px); }
+
+  /* Lugares en la mesa */
+  .mesa { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(9, 112px); justify-content: center; gap: var(--sl-e5); padding: var(--sl-e4) var(--sl-e8) 0; }
+  .lugar { border: 0; background: transparent; padding: 0; cursor: pointer; display: grid; justify-items: center; gap: var(--sl-e2); font: inherit; color: inherit; }
+  .lugar .hueco { position: relative; width: 104px; height: 136px; border-radius: 8px; display: grid; place-items: center; transition: transform var(--sl-dur) var(--sl-curva); }
+  .lugar .hueco.vacio { border: 2px dashed rgba(255,255,255,.5); background: rgba(14,22,32,.3); color: rgba(255,255,255,.75); }
+  .lugar .hueco.lleno { transform: rotate(var(--r)); filter: drop-shadow(0 10px 14px rgba(0,0,0,.45)); }
+  .lugar .hueco.lleno svg.sld-art { width: 104px; }
+  .lugar .hueco.lleno.dni svg.sld-art { width: 112px; }
+  .lugar:hover .hueco { transform: rotate(var(--r, 0deg)) translateY(-4px); }
+  .lugar:focus-visible { outline: none; }
+  .lugar:focus-visible .hueco { outline: 3px solid #6FE0C4; outline-offset: 4px; }
+  .lugar .marca { position: absolute; right: -8px; top: -8px; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: #3E9080; color: #fff; box-shadow: 0 0 0 3px rgba(14,22,32,.4); }
+  .lugar .marca.obs { background: #E3A936; color: #1C1C1C; }
+  .lugar .marca svg { width: 15px; height: 15px; stroke-width: 3; }
+  .lugar .tag { background: #fff; color: var(--sl-texto); border-radius: 8px; padding: 6px 8px; font-size: 14px; font-weight: 600; line-height: 1.2; text-align: center; box-shadow: var(--sl-sombra-2); width: 112px; }
+  .lugar .tag small { display: block; font-weight: 500; color: var(--sl-gris); }
+  .lugar.recibe .hueco { animation: recibe 600ms cubic-bezier(.2,1.6,.4,1); }
+  @keyframes recibe { 0% { transform: scale(1.15) rotate(var(--r)); } 100% { transform: rotate(var(--r)); } }
+  .lugar.destino .hueco.vacio { border-color: #6FE0C4; background: rgba(111,224,196,.15); }
+
+  /* Zona para soltar */
+  .zona { position: absolute; z-index: 2; left: 50%; bottom: var(--sl-e8); transform: translateX(-50%); width: 760px; min-height: 220px; border-radius: 24px; border: 2px dashed rgba(255,255,255,.55); background: rgba(14,22,32,.45); backdrop-filter: blur(6px); display: grid; place-content: center; justify-items: center; gap: var(--sl-e3); text-align: center; padding: var(--sl-e6); transition: transform var(--sl-dur) var(--sl-curva), border-color var(--sl-dur), background var(--sl-dur); }
+  .zona.encima { transform: translateX(-50%) scale(1.03); border-color: #6FE0C4; background: rgba(32,119,102,.45); }
+  .zona h1 { color: #fff; font-size: 24px; }
+  .zona p { opacity: .85; }
+  .zona .bots { display: flex; gap: var(--sl-e3); margin-top: var(--sl-e2); }
+  .sl-btn .sl-tecla { margin-left: 4px; }
+  .sl-btn-primario .sl-tecla { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.3); color: #fff; }
+  .sl-btn.vidrio { background: rgba(255,255,255,.12); color: #fff; }
+  .sl-btn.vidrio .sl-tecla { background: transparent; color: #fff; border-color: rgba(255,255,255,.4); }
+
+  /* Pila de archivos */
+  .archivo { position: fixed; z-index: 20; width: 112px; left: 0; top: 0; transition: transform 640ms cubic-bezier(.6,0,.3,1), opacity var(--sl-dur); filter: drop-shadow(0 14px 18px rgba(0,0,0,.5)); }
+  .archivo svg.sld-art { width: 100%; display: block; }
+  .archivo .nombre { position: absolute; left: 50%; top: 100%; margin-top: 8px; transform: translateX(-50%); white-space: nowrap; font-size: 14px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: rgba(14,22,32,.75); }
+  .archivo.vuela .nombre { opacity: 0; }
+
+  .lectura { position: absolute; z-index: 25; left: 50%; bottom: 32px; transform: translate(-50%, 8px); opacity: 0; width: 440px; background: #fff; color: var(--sl-texto); border-radius: 18px; padding: var(--sl-e4) var(--sl-e5); box-shadow: var(--sl-sombra-3); transition: opacity var(--sl-dur), transform var(--sl-dur) var(--sl-curva); pointer-events: none; }
+  .lectura.ve { opacity: 1; transform: translate(-50%, 0); pointer-events: auto; }
+  .lectura .l1 { display: flex; gap: var(--sl-e3); align-items: center; }
+  .lectura .l1 i { color: var(--sl-verde); }
+  .lectura b { font: 700 17px/1.2 var(--sl-font-titulos); color: var(--sl-azul-noche); }
+  .lectura p { font-size: 14px; color: var(--sl-gris); margin-top: 4px; }
+  .lectura .quienes { display: flex; gap: var(--sl-e2); margin-top: var(--sl-e3); }
+  .lectura .quienes button { min-height: 40px; padding: 0 var(--sl-e4); border-radius: 999px; border: 1.5px solid var(--sl-borde); background: #fff; font: 600 15px/1 var(--sl-font-texto); color: var(--sl-azul-noche); display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  .lectura .quienes button:hover { border-color: var(--sl-verde); }
+
+  .pop { position: fixed; z-index: 30; width: 320px; background: #fff; color: var(--sl-texto); border-radius: 16px; padding: var(--sl-e4); box-shadow: var(--sl-sombra-3); opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity var(--sl-dur), transform var(--sl-dur) var(--sl-curva); }
+  .pop.ve { opacity: 1; transform: none; pointer-events: auto; }
+  .pop h3 { margin-bottom: 4px; }
+  .pop p { font-size: 14px; color: var(--sl-gris); margin-bottom: var(--sl-e3); }
+  .pop .bots { display: flex; gap: var(--sl-e2); }
+  .pop .sl-btn { min-height: 40px; padding: 0 var(--sl-e3); font-size: 15px; flex: 1; }
+  .fin { position: absolute; z-index: 26; left: 50%; bottom: var(--sl-e8); transform: translateX(-50%); width: 760px; border-radius: 24px; background: #fff; color: var(--sl-texto); padding: var(--sl-e6); display: flex; gap: var(--sl-e5); align-items: center; box-shadow: var(--sl-sombra-3); animation: sube var(--sl-dur-lenta) var(--sl-curva); }
+  @keyframes sube { from { opacity: 0; transform: translate(-50%, 24px); } to { opacity: 1; transform: translateX(-50%); } }
+  .fin img { width: 72px; height: 72px; border-radius: 50%; box-shadow: 0 0 0 4px #fff, 0 0 0 5px var(--sl-celeste); }
+  .fin div { flex: 1; }
+  .fin p { color: var(--sl-gris); }
+</style>
+</head>
+<body>
+  <header class="arriba">
+    <img src="../../../../common/brand/logo-provisional.png" alt="Fundación San Lucas">
+    <div class="t"><b>Tu documentación</b><span>Becas 2027 · UADE · Ingeniería en Informática · cierra el 12/12</span></div>
+    <span class="esp"></span>
+    <div class="cuenta"><svg viewBox="0 0 44 44"><circle class="f" cx="22" cy="22" r="18"/><circle class="v" id="anillo" cx="22" cy="22" r="18" stroke-dasharray="113.1" stroke-dashoffset="50"/></svg><div><b id="nListos">5 de 9</b><br><span>obligatorios listos</span></div></div>
+    <button class="redondo" aria-label="Salir a mi postulación" data-ir="application-status"><i data-icon="x" data-size="20"></i></button>
+  </header>
+
+  <section class="mesa" id="mesa" aria-label="Lugares de cada documento"></section>
+
+  <section class="zona" id="zona">
+    <i data-icon="folder-open" data-size="32"></i>
+    <h1>Soltá todos los archivos juntos, como vengan</h1>
+    <p>Fotos del celular, PDF, capturas de WhatsApp. Nos damos cuenta qué es cada uno, lo revisamos y lo ponemos en su lugar.</p>
+    <div class="bots">
+      <button class="sl-btn sl-btn-primario" id="elegir"><i data-icon="paperclip" data-size="20"></i>Elegir archivos <span class="sl-tecla">O</span></button>
+      <button class="sl-btn vidrio" id="demo">Simular: soltar 4 archivos <span class="sl-tecla">Espacio</span></button>
+    </div>
+  </section>
+
+  <div class="lectura" id="lectura" aria-live="polite"></div>
+  <div class="pop" id="pop" role="dialog"></div>
+
+  <script src="../../../../common/icons.js"></script>
+  <script src="../../shared/documents.js"></script>
+  <script src="../../../../common/navigate.js" defer></script>
+  <script>
+  (function () {
+    var D = SLD, $ = function (s) { return document.querySelector(s); };
+    var ROT = [-3, 2, -1.5, 3, -2.5, 1.5, -2, 2.5, -1];
+    var PILA = [
+      { id: 'rec-lautaro', nombre: 'recibo oct.pdf', que: 'Recibo de sueldo', porque: 'Es de Lautaro: es el único que cobra con recibo.', extra: '2 páginas · achicado a 220 KB' },
+      { id: 'dni-lautaro', nombre: 'IMG_20261119_1832.jpg', que: 'DNI · frente y dorso', porque: 'Leímos el código del DNI: Lautaro Benítez.', extra: 'Recortado y enderezado · 160 KB' },
+      { id: 'ing-mirta', nombre: 'WhatsApp Image 2026-11-18.jpeg', que: 'Declaración jurada de ingresos', porque: '¿De quién son estos ingresos?', pregunta: ['Mirta', 'Lautaro'], extra: 'Estaba oscura: la aclaramos' },
+      { id: 'analitico', nombre: 'analitico-nuevo.pdf', que: 'Analítico del secundario', porque: 'Reemplaza al que salió borroso. Ahora se leen todas las notas.', extra: '2 páginas · 310 KB' }
+    ];
+    var trabajando = false, esperaRespuesta = null;
+
+    function pintarMesa() {
+      $('#mesa').innerHTML = D.docs.filter(function (d) { return d.req; }).map(function (d, k) {
+        var p = D.person(d.who), v = d.state === 'pendiente';
+        var marca = D.isReady(d) ? '<span class="marca">' + slIcon('check', 15) + '</span>' : d.state === 'observado' ? '<span class="marca obs">' + slIcon('triangle-alert', 15) + '</span>' : '';
+        return '<button class="lugar" data-lugar="' + d.id + '"><span class="hueco ' + (v ? 'vacio' : 'lleno') + (d.kind === 'dni' ? ' dni' : '') + '" style="--r:' + (v ? 0 : ROT[k]) + 'deg">' + (v ? slIcon(d.kind === 'dni' ? 'id-card' : 'file-up', 28) : D.art(d.kind, { blur: d.state === 'observado' ? 1.4 : 0 })) + marca + '</span>' +
+          '<span class="tag">' + d.title.replace(' de ' + p.name, '') + '<small>' + (p.id === 'yo' ? 'Tuyo' : p.id === 'hogar' ? 'Del hogar' : p.name) + '</small></span></button>';
+      }).join('');
+      var c = D.counts(); $('#nListos').textContent = c.ready + ' de ' + c.total;
+      $('#anillo').style.strokeDashoffset = (113.1 * (1 - c.ready / c.total)).toFixed(1);
+    }
+    function lectura(item, html) { $('#lectura').innerHTML = html; slRenderIcons($('#lectura')); $('#lectura').classList.add('ve'); }
+
+    function soltar() {
+      if (trabajando) return; trabajando = true; cerrarPop();
+      var pend = PILA.filter(function (x) { return D.doc(x.id).state === 'pendiente' || D.doc(x.id).state === 'observado'; });
+      if (!pend.length) { trabajando = false; return; }
+      $('#zona').style.opacity = '0';
+      var cx = innerWidth / 2, cy = innerHeight - 330;
+      var els = pend.map(function (x, k) {
+        var el = document.createElement('div'); el.className = 'archivo';
+        el.innerHTML = D.art(D.doc(x.id).kind) + '<span class="nombre">' + x.nombre + '</span>';
+        el.style.opacity = '0';
+        el.style.transform = 'translate(' + (cx - 56 + (k - 1.5) * 150) + 'px,' + (cy - 40) + 'px) rotate(' + (k * 7 - 10) + 'deg)';
+        document.body.appendChild(el);
+        setTimeout(function () { el.style.opacity = '1'; el.style.transform = 'translate(' + (cx - 56 + (k - 1.5) * 150) + 'px,' + (cy - 80) + 'px) rotate(' + (k * 5 - 8) + 'deg)'; }, 60 + k * 90);
+        return el;
+      });
+      var k = 0;
+      function siguiente() {
+        if (k >= pend.length) { trabajando = false; $('#lectura').classList.remove('ve'); var c = D.counts(); if (c.ready === c.total) return terminar(); $('#zona').style.opacity = ''; return; }
+        var x = pend[k], el = els[k];
+        document.querySelectorAll('.lugar').forEach(function (l) { l.classList.toggle('destino', l.dataset.lugar === x.id); });
+        if (x.pregunta) {
+          lectura(x, '<div class="l1"><i data-icon="scan-text"></i><div><b>' + x.que + '</b><p>' + x.nombre + ' · ' + x.extra + '</p></div></div><p style="margin-top:8px;font-size:15px;color:var(--sl-texto)">' + x.porque + '</p><div class="quienes">' + x.pregunta.map(function (q, n) { return '<button data-resp="' + q + '"><span class="sl-tecla">' + (n + 1) + '</span>' + q + '</button>'; }).join('') + '</div>');
+          esperaRespuesta = function () { esperaRespuesta = null; ubicar(x, el, function () { k++; siguiente(); }); };
+          return;
+        }
+        lectura(x, '<div class="l1"><i data-icon="circle-check"></i><div><b>' + x.que + '</b><p>' + x.porque + '</p></div></div><p>' + x.nombre + ' · ' + x.extra + '</p>');
+        setTimeout(function () { ubicar(x, el, function () { k++; siguiente(); }); }, D.reduce ? 300 : 1300);
+      }
+      setTimeout(siguiente, 700);
+    }
+    function ubicar(x, el, luego) {
+      var lugar = document.querySelector('[data-lugar="' + x.id + '"] .hueco').getBoundingClientRect();
+      el.classList.add('vuela');
+      el.style.transform = 'translate(' + (lugar.left + lugar.width / 2 - 56) + 'px,' + (lugar.top - 4) + 'px) rotate(-2deg) scale(.93)';
+      setTimeout(function () {
+        el.remove(); var d = D.doc(x.id); d.state = 'cargado'; d.when = '19/11'; pintarMesa();
+        var l = document.querySelector('[data-lugar="' + x.id + '"]'); l.classList.add('recibe');
+        luego();
+      }, D.reduce ? 20 : 660);
+    }
+    function terminar() {
+      $('#zona').hidden = true;
+      var f = document.createElement('section'); f.className = 'fin';
+      f.innerHTML = '<img src="../../../../common/brand/logo-provisional.png" alt=""><div><h2>¡Están todos, Camila!</h2><p>Los 9 obligatorios están en su lugar. Revisá y enviá tu postulación.</p></div><button class="sl-btn sl-btn-primario" data-ir="application-review">Revisar y enviar <span class="sl-tecla">Enter</span></button>';
+      document.body.appendChild(f);
+    }
+    function pop(id, btn) {
+      var d = D.doc(id), r = btn.getBoundingClientRect(), p = D.person(d.who);
+      var html = '<h3>' + d.title + '</h3><p>' + (d.state === 'pendiente' ? d.detail + '. Soltalo en la mesa o elegilo acá.' : d.state === 'observado' ? d.reason : 'Cargado el ' + d.when + ' · ' + D.STATES[d.state].label) + '</p>' +
+        (d.state === 'pendiente' || d.state === 'observado' ? '<div class="bots"><button class="sl-btn sl-btn-primario" data-uno="' + id + '">Elegir archivo</button>' + (p.ini && p.id !== 'yo' ? '<button class="sl-btn sl-btn-secundario" data-pedir="' + id + '">Pedírselo a ' + p.name + '</button>' : '') + '</div>'
+          : '<div class="bots"><button class="sl-btn sl-btn-secundario" data-ver>Ver</button><button class="sl-btn sl-btn-secundario" data-uno="' + id + '">Reemplazar</button><button class="sl-btn sl-btn-texto" style="color:var(--sl-error)" data-borrar="' + id + '">Borrar</button></div>');
+      var el = $('#pop'); el.innerHTML = html;
+      el.style.left = Math.min(innerWidth - 340, Math.max(20, r.left + r.width / 2 - 160)) + 'px'; el.style.top = (r.bottom + 12) + 'px';
+      el.classList.add('ve');
+    }
+    function cerrarPop() { $('#pop').classList.remove('ve'); }
+
+    document.addEventListener('click', function (e) {
+      var t = e.target.closest('button');
+      if (!t) { cerrarPop(); return; }
+      if (t.hasAttribute('data-ir')) return;
+      if (t.id === 'demo' || t.id === 'elegir') return soltar();
+      if (t.dataset.lugar) return pop(t.dataset.lugar, t);
+      if (t.dataset.resp && esperaRespuesta) { $('#lectura').querySelector('p').textContent = 'Ingresos de ' + t.dataset.resp + ' · guardando'; return esperaRespuesta(); }
+      if (t.dataset.uno) { cerrarPop(); var d = D.doc(t.dataset.uno); d.state = 'cargado'; d.when = '19/11'; pintarMesa(); document.querySelector('[data-lugar="' + d.id + '"]').classList.add('recibe'); return D.toast('Revisado y subido: ' + d.title, 'circle-check'); }
+      if (t.dataset.pedir) { cerrarPop(); return D.toast('Le mandamos el enlace a ' + D.person(D.doc(t.dataset.pedir).who).name + ' por WhatsApp.', 'message-circle'); }
+      if (t.dataset.borrar) { cerrarPop(); D.doc(t.dataset.borrar).state = 'pendiente'; pintarMesa(); return D.toast('Lo sacamos de la mesa.', 'trash-2'); }
+      if (t.hasAttribute('data-ver')) { cerrarPop(); return D.toast('Se abre en grande, con zoom.', 'zoom-in'); }
+    });
+    var z = $('#zona');
+    ['dragenter', 'dragover'].forEach(function (ev) { document.addEventListener(ev, function (e) { e.preventDefault(); z.classList.add('encima'); }); });
+    document.addEventListener('dragleave', function (e) { if (!e.relatedTarget) z.classList.remove('encima'); });
+    document.addEventListener('drop', function (e) { e.preventDefault(); z.classList.remove('encima'); soltar(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'o' || e.key === 'O') { e.preventDefault(); soltar(); }
+      else if ((e.key === '1' || e.key === '2') && esperaRespuesta) { var b = document.querySelectorAll('[data-resp]')[+e.key - 1]; if (b) b.click(); }
+      else if (e.key === 'Escape') cerrarPop();
+      else if (e.key === 'Enter' && document.querySelector('.fin [data-ir]')) document.querySelector('.fin [data-ir]').click();
+    });
+    pintarMesa();
+  })();
+  </script>
+</body>
+</html>

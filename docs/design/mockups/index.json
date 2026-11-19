@@ -1,1 +1,13 @@
-{ "screens": [] }
+{
+  "screens": [
+    {
+      "id": "application-documents",
+      "title": "P14 · Documentación",
+      "variants": [
+        { "name": "1 · Lista clara", "path": "application-documents/{device}/variant-1-checklist/" },
+        { "name": "2 · De a uno", "path": "application-documents/{device}/variant-2-one-by-one/" },
+        { "name": "3 · La mesa (audaz)", "path": "application-documents/{device}/variant-3-table/" }
+      ]
+    }
+  ]
+}

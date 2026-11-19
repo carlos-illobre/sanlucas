@@ -12,7 +12,7 @@
 | P11 | Domicilio | `address` | | — |
 | P12 | Grupo familiar | `household` | Convivientes, vínculo, ocupación e ingresos | — |
 | P13 | Datos académicos | `academic-data` | Colegio o universidad y carrera | — |
-| **P14** | **Documentación** | `application-documents` | **Checklist de documentos de la convocatoria; cada uno se carga con foto o archivo, con control de calidad y estado** | **Director de arte: en curso** |
+| **P14** | **Documentación** | `application-documents` | **Checklist de documentos de la convocatoria; cada uno se carga con foto o archivo, con control de calidad y estado** | **3 variantes del director de arte; falta elegir** |
 | P15 | Revisión final | `application-review` | Resumen y envío | — |
 | P16 | Postulación enviada | `application-sent` | Confirmación y próximos pasos | — |
 | P17 | Estado de mi postulación | `application-status` | Línea de tiempo del proceso | — |
