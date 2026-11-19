@@ -19,6 +19,16 @@ Proyecto desarrollado en el marco de la competencia (estilo hackathon) organizad
 - [Requerimientos conocidos](docs/requerimientos.md): lo que sabemos hasta ahora, preguntas abiertas y supuestos.
 - [Plan de acción](docs/plan-de-accion.md): cronograma, roles, entregables y estrategia para la competencia.
 - [Perfil de la Fundación](docs/perfil-fundacion.md): misión, valores, marca, voz y lineamientos de interfaz.
+- [Lenguaje visual](docs/design/visual-language.md): colores, tipografía, íconos y reglas de la interfaz.
+
+## Maquetas
+
+Se ven funcionando en el [visor de maquetas](https://carlos-illobre.github.io/sanlucas/docs/design/) (celular y computadora).
+
+| Pantalla | Versión | Enlace |
+|---|---|---|
+| P14 · Documentación | Director de arte (skill): 1 · Lista clara, 2 · De a uno, 3 · La mesa | [Abrir en el visor](https://carlos-illobre.github.io/sanlucas/docs/design/#screen=application-documents&variant=0&device=phone) |
+| P14 · Documentación | Prompt directo (v2): A · Tablero, B · Una cosa por vez, C · La ronda (solo celular) | [A](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-a-clasica.html) · [B](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-b-premium.html) · [C](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/variante-c-disruptiva.html) · [Comparativa](https://carlos-illobre.github.io/sanlucas/docs/design/v2/application-documents/) |
 
 ## Fechas clave (tentativas)
 
